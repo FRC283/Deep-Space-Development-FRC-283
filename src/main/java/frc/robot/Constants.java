@@ -41,17 +41,18 @@ public class Constants
 			
 
 		//DIO
-		public static final int ARM_ENCODER_PORT_A = 0;
-		public static final int ARM_ENCODER_PORT_B = 0;
-		public static final int LEFT_WRIST_ENCODER_PORT_A = 2;
-		public static final int LEFT_WRIST_ENCODER_PORT_B = 3;
-		public static final int RIGHT_WRIST_ENCODER_PORT_A = 4;
-		public static final int RIGHT_WRIST_ENCODER_PORT_B = 5;
-		public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_A = 6;
-		public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_B = 7;
-		public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_A = 8;
-		public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_B = 9;
-		 
+
+		//Analog
+			public static final int ARM_ENCODER_PORT_A = 1;
+			//public static final int ARM_ENCODER_PORT_B = 0;
+			public static final int LEFT_WRIST_ENCODER_PORT_A = 2;
+			//public static final int LEFT_WRIST_ENCODER_PORT_B = 3;
+			public static final int RIGHT_WRIST_ENCODER_PORT_A = 3;
+			//public static final int RIGHT_WRIST_ENCODER_PORT_B = 5;
+			public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_A = 4;
+			//public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_B = 7;
+			public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_A = 5;
+			//public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_B = 9;
 		//Pneumatics
 			public static final int FRONT_LEFT_LIFT_PORT = 0;
 			public static final int FRONT_RIGHT_LIFT_PORT = 1;

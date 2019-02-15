@@ -8,8 +8,6 @@ public class DriveSubsystem
 {
     TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
 
-    Encoder frontLeftEnc, backLeftEnc, frontRightEnc, backRightEnc;
-
     
 
     DriveSubsystem()
