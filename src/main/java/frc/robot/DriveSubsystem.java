@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Victor;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -15,10 +14,10 @@ public class DriveSubsystem
 
     DriveSubsystem()
     {
-        frontLeftDrive = new TalonSRX(Constants.FRONT_LEFT_PORT);
-        backLeftDrive = new TalonSRX(Constants.BACK_LEFT_PORT);
-        frontRightDrive = new TalonSRX(Constants.FRONT_RIGHT_PORT);
-        backRightDrive = new TalonSRX(Constants.BACK_RIGHT_PORT);
+        frontLeftDrive = new TalonSRX(Constants.FRONT_LEFT_DRIVE_PORT);
+        backLeftDrive = new TalonSRX(Constants.BACK_LEFT_DRIVE_PORT);
+        frontRightDrive = new TalonSRX(Constants.FRONT_RIGHT_DRIVE_PORT);
+        backRightDrive = new TalonSRX(Constants.BACK_RIGHT_DRIVE_PORT);
     }
     /**
      * Function for controlling the motor controllers on the robot.
@@ -31,10 +30,10 @@ public class DriveSubsystem
      */
     public void drive(double lYMag, double lXMag, double rXMag)
     {
-        frontLeftDrive.set( ControlMode.PercentOutput ,(-rXMag + lYMag + lXMag) * 1);
-		frontRightDrive.set(ControlMode.PercentOutput ,(rXMag + lYMag - lXMag) * -1);
-		backLeftDrive.set(ControlMode.PercentOutput ,(+rXMag - lYMag + lXMag) * -1);
-		backRightDrive.set(ControlMode.PercentOutput ,(-rXMag - lYMag - lXMag) * 1);	
+        frontLeftDrive.set( ControlMode.PercentOutput ,(rXMag + lYMag + lXMag) * 1);
+		frontRightDrive.set(ControlMode.PercentOutput ,(-rXMag + lYMag - lXMag) * -1);
+		backLeftDrive.set(ControlMode.PercentOutput ,(-rXMag - lYMag + lXMag) * -1);
+		backRightDrive.set(ControlMode.PercentOutput ,(rXMag - lYMag - lXMag) * 1);	
     }
 
 }

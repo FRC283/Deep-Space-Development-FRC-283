@@ -4,6 +4,7 @@ public class Constants
 {
 	//Computer Ports
 		public static final int LOGITECH_PORT = 0;
+		public static final int XBOX_PORT = 1;
 	//Logitech Ports
 		//Buttons
 			public static final int A = 1;
@@ -25,19 +26,38 @@ public class Constants
 			public static final int RIGHT_Y = 5;
 	//Robot Ports
 		//CAN
-			public static final int FRONT_LEFT_PORT = 0; //Drive
-			public static final int FRONT_RIGHT_PORT = 1; //Drive
-			public static final int BACK_LEFT_PORT = 2; //Drive
-			public static final int BACK_RIGHT_PORT = 3; //Drive
+			public static final int FRONT_LEFT_DRIVE_PORT = 0; //Drive
+			public static final int FRONT_RIGHT_DRIVE_PORT = 1; //Drive
+			public static final int BACK_LEFT_DRIVE_PORT = 2; //Drive
+			public static final int BACK_RIGHT_DRIVE_PORT = 3; //Drive
 
 		//PWM
-			public static final int ELEVATOR_PORT = 1;
+			public static final int ARM_MOTOR_PORT = 1;
+			public static final int LEFT_WRIST_MOTOR_PORT = 0;
+			public static final int RIGHT_WRIST_MOTOR_PORT = 5;
+			public static final int LEFT_INTAKE_ACTUATION_MOTOR_PORT = 3;
+			public static final int RIGHT_INTAKE_ACTUATION_MOTOR_PORT = 4;
+			public static final int INTAKE_MOTOR_PORT = 5;
+			
 
 		//DIO
-			public static final int BACK_SWITCH = 0; //Elevator
-			public static final int FRONT_SWITCH = 1; //Elevator
-			public static final int PRESSURE_SWITCH = 2; 
+		public static final int ARM_ENCODER_PORT_A = 0;
+		public static final int ARM_ENCODER_PORT_B = 0;
+		public static final int LEFT_WRIST_ENCODER_PORT_A = 2;
+		public static final int LEFT_WRIST_ENCODER_PORT_B = 3;
+		public static final int RIGHT_WRIST_ENCODER_PORT_A = 4;
+		public static final int RIGHT_WRIST_ENCODER_PORT_B = 5;
+		public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_A = 6;
+		public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_B = 7;
+		public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_A = 8;
+		public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_B = 9;
+		 
 		//Pneumatics
-			public static final int FILL_PORT = 0;
-			public static final int FIRE_PORT = 1;
+			public static final int FRONT_LEFT_LIFT_PORT = 0;
+			public static final int FRONT_RIGHT_LIFT_PORT = 1;
+			public static final int BACK_LEFT_LIFT_PORT = 2;
+			public static final int BACK_RIGHT_LIFT_PORT = 3;
+			public static final int GRIPPER_PORT = 4;
+			public static final int CARGO_KICKER_PORT = 5;
+			public static final int HATCH_RELEASE_PORT = 6;
 }

@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +24,10 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  Solenoid runner;
   DriveSubsystem drive;
-  Joystick logitech;
+  ArmSubsystem arm;
+  IntakeSubsystem intake;
+  Joystick logitech, xbox;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -37,9 +37,11 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    runner = new Solenoid(0);
     drive = new DriveSubsystem();
-    logitech = new Joystick(0);
+    arm = new ArmSubsystem();
+    intake = new IntakeSubsystem();
+    logitech = new Joystick(Constants.LOGITECH_PORT);
+    xbox = new Joystick(Constants.XBOX_PORT);
   }
 
   /**
@@ -95,6 +97,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() 
   {
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
+    arm.rotate(xbox.getRawAxis(Constants.LEFT_Y));
   }
 
   /**
