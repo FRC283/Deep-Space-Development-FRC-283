@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Encoder;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -28,10 +27,10 @@ public class DriveSubsystem
      */
     public void drive(double lYMag, double lXMag, double rXMag)
     {
-        frontLeftDrive.set( ControlMode.PercentOutput ,(rXMag + lYMag + lXMag) * 1);
-		frontRightDrive.set(ControlMode.PercentOutput ,(-rXMag + lYMag - lXMag) * -1);
-		backLeftDrive.set(ControlMode.PercentOutput ,(-rXMag - lYMag + lXMag) * -1);
-		backRightDrive.set(ControlMode.PercentOutput ,(rXMag - lYMag - lXMag) * 1);	
+        frontLeftDrive.set(ControlMode.PercentOutput, (rXMag + lYMag + lXMag) * 1);
+		frontRightDrive.set(ControlMode.PercentOutput, (-rXMag + lYMag - lXMag) * -1);
+		backLeftDrive.set(ControlMode.PercentOutput, (-rXMag - lYMag + lXMag) * -1);
+		backRightDrive.set(ControlMode.PercentOutput, (rXMag - lYMag - lXMag) * 1);	
     }
 
 }
