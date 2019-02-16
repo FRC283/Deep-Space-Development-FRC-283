@@ -1,16 +1,27 @@
 package frc.robot;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj.*;
+
 public class ArmSubsystem
 {
     Victor armMotor, leftWristMotor, rightWristMotor;
     //Encoder leftWristEnc, rightWristEnc;
     Solenoid gripSol, cargoSol, hatchSol;
     AnalogInput armEnc, leftWristEnc, rightWristEnc;
+    Boolean isPositioning = false;
 
-    double target, pos;
+    double target; 
+    double pos;
+    /**armEnc feeds out voltage 0-5V corresponding to degree measures; 5V = 359deg */ 
+    double current;
+    private static final double speed = .5;
+    private static final int LOW_CARGO = 30;
+    private static final int LOW_HATCH = 35;
+    private static final int MID_CARGO = 60;
+    private static final int MID_HATCH = 65;
+    private static final int HIGH_CARGO = 90;
+    private static final int HIGH_HATCH = 95;
+
 
     ArmSubsystem()
     {
@@ -29,44 +40,71 @@ public class ArmSubsystem
         
     }
 
-    /**
-     * Periodic for the Arm Subsystem
-     * 
-     * If a combination of y, x, and a are pressed, the highest precedence is 
-     * the leftmost argument (y > x > a)
-     * 
-     * @param y - Logitech 'Y' button
-     * @param x - Logitech 'X' button
-     * @param a - Logitech 'A' button
-     */
-    public void periodic(boolean y, boolean x, boolean a)
+    public void periodic()
     {
-        // When 'y' is true, = 90 deg; When 'x' is true, = 60 deg; When 'a' is true,= 30 deg;
-        target = (y ? (90) : (x ? (60) : (a ? 30 : 0))); 
+        current = armMotor.getSpeed();
+        pos = armEnc.getVoltage()/(5/360);//Divide VoltIn by Volts per degree ~0.1389V
+    }
 
-        //armEnc feeds out voltage 0-5V corresponding to degree measures; 5V = 359deg
-        pos = armEnc.getVoltage()/(5/360); //Divide VoltIn by Volts per degree ~0.1389V
-        rotatePeriodic(target, pos);
+    /**
+     * Positioning function for the Arm
+     * 
+     * If a combination of are pressed, the highest precedence is 
+     * the leftmost argument
+     * characters:
+     * @param position - based on the character input, arm will go to position based on encoder
+     *      'l' - lowest position (default)
+     *      'm' - middle position
+     *      'h' - highest position
+     * @param isHatch - If true, goes to corresponding Hatch Position, otherwise it goes to Cargo position
+     */
+    public void rotate(char position, boolean isHatch)
+    {
+
+        //
+
+        //rotatePeriodic(position, isHatch);
+        if(isPositioning == false)
+        {
+            switch(position)
+            {
+                case 'l':
+                    if (isHatch)
+                        armMotor.set((pos < LOW_HATCH) ? (speed) : ((pos > LOW_HATCH) ? (-(speed)) : 0));
+                    else
+                        armMotor.set((pos < LOW_CARGO) ? (speed) : ((pos > LOW_CARGO) ? (-(speed)) : 0));
+                    break;
+                case 'm':
+                    if (isHatch)
+                        armMotor.set((pos < MID_HATCH) ? (speed) : ((pos > MID_HATCH) ? (-(speed)) : 0));
+                    else
+                        armMotor.set((pos < MID_CARGO) ? (speed) : ((pos > MID_CARGO) ? (-(speed)) : 0));
+                    break;
+                case 'h':
+                    if (isHatch)
+                        armMotor.set((pos < HIGH_HATCH) ? (speed) : ((pos > HIGH_HATCH) ? (-(speed)) : 0));
+                    else
+                        armMotor.set((pos < HIGH_CARGO) ? (speed) : ((pos > HIGH_CARGO) ? (-(speed)) : 0));
+                    break;
+                default:
+                    armMotor.set(0);
+            }
+            isPositioning = true;
+        }
     }
 
     public void rotate(double armMag)
     {
         armMotor.set(armMag);
     }
-    public void rotateInit(double degree)
-    {
-        
-    }
 
-    public void rotatePeriodic(double target, double position)
+
+
+    public void rotatePeriodic()
     {
-        if(position < target)
+        if(current != 0 && ( &&    ))
         {
             armMotor.set(0.25);
-        }
-        else if(position > target)
-        {
-            armMotor.set(-0.25);
         }
     }
 }
