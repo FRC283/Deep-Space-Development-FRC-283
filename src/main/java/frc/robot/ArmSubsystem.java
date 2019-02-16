@@ -8,9 +8,11 @@ public class ArmSubsystem
     //Encoder leftWristEnc, rightWristEnc;
     Solenoid gripSol, cargoSol, hatchSol;
     AnalogInput armEnc, leftWristEnc, rightWristEnc;
-    Boolean isPositioning = false;
 
+    Boolean isPositioning = false;
+    /** */
     double target; 
+    /** */
     double pos;
     /**armEnc feeds out voltage 0-5V corresponding to degree measures; 5V = 359deg */ 
     double current;
@@ -69,42 +71,43 @@ public class ArmSubsystem
             switch(position)
             {
                 case 'l':
-                    if (isHatch)
-                        armMotor.set((pos < LOW_HATCH) ? (speed) : ((pos > LOW_HATCH) ? (-(speed)) : 0));
-                    else
-                        armMotor.set((pos < LOW_CARGO) ? (speed) : ((pos > LOW_CARGO) ? (-(speed)) : 0));
+                        target =(isHatch ? LOW_HATCH : LOW_CARGO);
                     break;
                 case 'm':
-                    if (isHatch)
-                        armMotor.set((pos < MID_HATCH) ? (speed) : ((pos > MID_HATCH) ? (-(speed)) : 0));
-                    else
-                        armMotor.set((pos < MID_CARGO) ? (speed) : ((pos > MID_CARGO) ? (-(speed)) : 0));
+                        target = (isHatch ? MID_HATCH : MID_CARGO);
                     break;
                 case 'h':
-                    if (isHatch)
-                        armMotor.set((pos < HIGH_HATCH) ? (speed) : ((pos > HIGH_HATCH) ? (-(speed)) : 0));
-                    else
-                        armMotor.set((pos < HIGH_CARGO) ? (speed) : ((pos > HIGH_CARGO) ? (-(speed)) : 0));
+                        target =(isHatch ? HIGH_HATCH : HIGH_CARGO);
                     break;
                 default:
                     armMotor.set(0);
             }
+            armMotor.set((pos < target) ? (speed) : ((pos > target) ? (-(speed)) : 0));
             isPositioning = true;
         }
     }
-
-    public void rotate(double armMag)
+    /**
+     * manual rotation of arm and wrist
+     * 
+     * @param armMag - arm magnitude
+     * @param wristMag - wrist magnitude
+     */
+    public void rotate(double armMag, double wristMag)
     {
         armMotor.set(armMag);
+        leftWristMotor.set(wristMag);
+        rightWristMotor.set(-wristMag);
     }
 
 
-
+    /**
+     * periodic check to see if arm is at position
+     */
     public void rotatePeriodic()
     {
-        if(current != 0 && ( &&    ))
+        if(((current > 0) && (target <= pos)) ||((current < 0) && (target >= pos)))
         {
-            armMotor.set(0.25);
+            armMotor.set(0);
         }
     }
 }
