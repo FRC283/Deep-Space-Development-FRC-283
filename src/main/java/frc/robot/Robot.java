@@ -22,11 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   DriveSubsystem drive;
   ArmSubsystem arm;
   IntakeSubsystem intake;
+  LiftSubsystem lift;
   Joystick logitech, xbox;
   /**
    * This function is run when the robot is first started up and should be
@@ -97,9 +99,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() 
   {
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
-    arm.periodic(logitech.getRawButton(Constants.Y), 
-                  logitech.getRawButton(Constants.X), 
-                  logitech.getRawButton(Constants.A));
+    arm.periodic(logitech.getRawButton(Constants.Y), logitech.getRawButton(Constants.X), logitech.getRawButton(Constants.A));
+    lift.unlockLift(logitech.getRawButton(Constants.BACK));
+    lift.liftPistons(xbox.getRawButton(Constants.A), xbox.getRawButton(Constants.X), xbox.getRawButton(Constants.B));
   }
 
   /**
