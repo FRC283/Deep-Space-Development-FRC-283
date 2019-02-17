@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
     arm.periodic();
     lift.unlockLift(logitech.getRawButton(Constants.BACK));
     lift.liftPistons(xbox.getRawButton(Constants.A), xbox.getRawButton(Constants.X), xbox.getRawButton(Constants.B));
+    drive.periodic();
   }
 
   /**
