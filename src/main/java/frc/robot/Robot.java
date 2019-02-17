@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
     drive = new DriveSubsystem();
     arm = new ArmSubsystem();
     intake = new IntakeSubsystem();
+    lift = new LiftSubsystem();
     logitech = new Joystick(Constants.LOGITECH_PORT);
     xbox = new Joystick(Constants.XBOX_PORT);
   }
