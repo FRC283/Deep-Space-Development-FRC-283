@@ -38,6 +38,7 @@ public class Constants
 			public static final int LEFT_INTAKE_ACTUATION_MOTOR_PORT = 2;	//SOLID ORANGE
 			public static final int RIGHT_INTAKE_ACTUATION_MOTOR_PORT = 4;	//SOLID RED
 			public static final int INTAKE_ROLLER_MOTOR_PORT = 3;			//SOLID BLACK
+			public static final int CAMERA_SERVO_PORT = 6;
 			
 
 		//DIO

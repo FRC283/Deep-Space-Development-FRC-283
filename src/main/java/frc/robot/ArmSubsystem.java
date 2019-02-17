@@ -1,7 +1,6 @@
 package frc.robot;
 
-import edu.wpi.cscore.CameraServerJNI;
-import edu.wpi.first.cameraserver.CameraServer;
+
 import edu.wpi.first.wpilibj.*;
 
 public class ArmSubsystem
@@ -44,7 +43,6 @@ public class ArmSubsystem
         hatchSol = new Solenoid(Constants.HATCH_RELEASE_PORT);
 
         cameraSer = new Servo(Constants.CAMERA_SERVO_PORT);
-        aimArm = new CameraServer();
     
     }
 
