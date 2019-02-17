@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj.*;
 
 public class ArmSubsystem
 {
-    Victor armMotor, leftWristMotor, rightWristMotor;
+    Victor elbowMotor, leftWristMotor, rightWristMotor;
     //Encoder leftWristEnc, rightWristEnc;
     Solenoid gripSol, cargoSol, hatchSol;
-    AnalogInput armEnc, leftWristEnc, rightWristEnc;
+    AnalogInput  leftWristEnc, rightWristEnc;
+    Encoder elbowEnc;
     Servo cameraSer;
     CameraServer aimArm;
     Boolean isPositioning = false;
@@ -30,11 +31,11 @@ public class ArmSubsystem
 
     ArmSubsystem()
     {
-        armMotor = new Victor(Constants.ARM_MOTOR_PORT);
+        elbowMotor = new Victor(Constants.ELBOW_MOTOR_PORT);
         leftWristMotor = new Victor(Constants.LEFT_WRIST_MOTOR_PORT);
         rightWristMotor = new Victor(Constants.RIGHT_WRIST_MOTOR_PORT);
 
-        armEnc = new AnalogInput(Constants.ARM_ENCODER_PORT_A);
+        elbowEnc = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
         leftWristEnc = new AnalogInput(Constants.LEFT_WRIST_ENCODER_PORT_A);
         rightWristEnc = new AnalogInput(Constants.RIGHT_WRIST_ENCODER_PORT_A);
 
@@ -44,13 +45,13 @@ public class ArmSubsystem
 
         cameraSer = new Servo(Constants.CAMERA_SERVO_PORT);
         aimArm = new CameraServer();
-        
+    
     }
 
     public void periodic()
     {
-        current = armMotor.getSpeed();
-        pos = armEnc.getVoltage()/(5/360);//Divide VoltIn by Volts per degree ~0.1389V
+        current = elbowMotor.getSpeed();
+        pos = elbowEnc.get();//Divide VoltIn by Volts per degree ~0.1389V
     }
 
     /**
@@ -76,6 +77,7 @@ public class ArmSubsystem
             switch(position)
             {
                 case 'l':
+                        // if the hatch is selected, go for hatch, otherwise, go to cargo
                         target =(isHatch ? LOW_HATCH : LOW_CARGO);
                     break;
                 case 'm':
@@ -85,9 +87,9 @@ public class ArmSubsystem
                         target =(isHatch ? HIGH_HATCH : HIGH_CARGO);
                     break;
                 default:
-                    armMotor.set(0);
+                elbowMotor.set(0);
             }
-            armMotor.set((pos < target) ? (speed) : ((pos > target) ? (-(speed)) : 0));
+            elbowMotor.set((pos < target) ? (speed) : ((pos > target) ? (-(speed)) : 0));
             isPositioning = true;
         }
     }
@@ -99,7 +101,7 @@ public class ArmSubsystem
      */
     public void rotate(double armMag, double wristMag)
     {
-        armMotor.set(armMag*0.5);
+        elbowMotor.set(armMag*0.5);
         leftWristMotor.set(wristMag);
         rightWristMotor.set(-wristMag);
     }
@@ -109,10 +111,12 @@ public class ArmSubsystem
      * periodic check to see if arm is at position
      */
     public void rotatePeriodic()
-    {
+    {   
+        //if the arm has reached its target, stop
         if(((current > 0) && (target <= pos)) ||((current < 0) && (target >= pos)))
         {
-            armMotor.set(0);
+            elbowMotor.set(0);
+            isPositioning = false;
         }
     }
 }
