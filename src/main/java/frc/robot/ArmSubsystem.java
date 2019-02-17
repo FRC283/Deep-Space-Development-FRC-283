@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.*;
 
 public class ArmSubsystem
@@ -11,7 +10,6 @@ public class ArmSubsystem
     AnalogInput  leftWristEnc, rightWristEnc;
     Encoder elbowEnc;
     Servo cameraSer;
-    CameraServer aimArm;
     Boolean isPositioning = false;
     /** */
     double target; 

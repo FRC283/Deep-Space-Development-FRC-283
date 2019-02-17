@@ -23,11 +23,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   DriveSubsystem drive;
   ArmSubsystem arm;
   IntakeSubsystem intake;
+  LiftSubsystem lift;
   Joystick logitech, xbox;
   /**
    * This function is run when the robot is first started up and should be
@@ -41,6 +43,7 @@ public class Robot extends TimedRobot {
     drive = new DriveSubsystem();
     arm = new ArmSubsystem();
     intake = new IntakeSubsystem();
+    lift = new LiftSubsystem();
     logitech = new Joystick(Constants.LOGITECH_PORT);
     xbox = new Joystick(Constants.XBOX_PORT);
     CameraServer.getInstance().startAutomaticCapture();
@@ -101,6 +104,9 @@ public class Robot extends TimedRobot {
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
     arm.periodic();
     arm.rotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
+    arm.periodic();
+    lift.unlockLift(logitech.getRawButton(Constants.BACK));
+    lift.liftPistons(xbox.getRawButton(Constants.A), xbox.getRawButton(Constants.X), xbox.getRawButton(Constants.B));
   }
 
   /**
