@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.cscore.CameraServerJNI;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.*;
 
 public class ArmSubsystem
@@ -8,7 +10,8 @@ public class ArmSubsystem
     //Encoder leftWristEnc, rightWristEnc;
     Solenoid gripSol, cargoSol, hatchSol;
     AnalogInput armEnc, leftWristEnc, rightWristEnc;
-
+    Servo cameraSer;
+    CameraServer aimArm;
     Boolean isPositioning = false;
     /** */
     double target; 
@@ -39,6 +42,8 @@ public class ArmSubsystem
         cargoSol = new Solenoid(Constants.CARGO_KICKER_PORT);
         hatchSol = new Solenoid(Constants.HATCH_RELEASE_PORT);
 
+        cameraSer = new Servo(Constants.CAMERA_SERVO_PORT);
+        aimArm = new CameraServer();
         
     }
 
@@ -94,7 +99,7 @@ public class ArmSubsystem
      */
     public void rotate(double armMag, double wristMag)
     {
-        armMotor.set(armMag);
+        armMotor.set(armMag*0.5);
         leftWristMotor.set(wristMag);
         rightWristMotor.set(-wristMag);
     }

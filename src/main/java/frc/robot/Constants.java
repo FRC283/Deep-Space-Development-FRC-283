@@ -37,7 +37,8 @@ public class Constants
 			public static final int RIGHT_WRIST_MOTOR_PORT = 5;
 			public static final int LEFT_INTAKE_ROTATION_MOTOR_PORT = 3;
 			public static final int RIGHT_INTAKE_ROTATION_MOTOR_PORT = 4;
-			public static final int INTAKE_MOTOR_PORT = 5;
+			public static final int INTAKE_MOTOR_PORT = 7;
+			public static final int CAMERA_SERVO_PORT = 6;
 			
 
 		//DIO
