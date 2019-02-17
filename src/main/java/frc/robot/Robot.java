@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     drive = new DriveSubsystem();
-    arm = new ArmSubsystem();
-    intake = new IntakeSubsystem();
+    //arm = new ArmSubsystem();
+    //intake = new IntakeSubsystem();
     logitech = new Joystick(Constants.LOGITECH_PORT);
     xbox = new Joystick(Constants.XBOX_PORT);
   }
@@ -97,9 +97,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() 
   {
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
-    arm.periodic(logitech.getRawButton(Constants.Y), 
-                  logitech.getRawButton(Constants.X), 
-                  logitech.getRawButton(Constants.A));
+    drive.periodic();
   }
 
   /**
