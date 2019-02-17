@@ -97,9 +97,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() 
   {
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
-    arm.periodic(logitech.getRawButton(Constants.Y), 
-                  logitech.getRawButton(Constants.X), 
-                  logitech.getRawButton(Constants.A));
+    arm.periodic();
+    arm.rotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
   }
 
   /**
