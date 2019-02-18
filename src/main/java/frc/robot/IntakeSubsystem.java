@@ -15,9 +15,9 @@ public class IntakeSubsystem
 
     IntakeSubsystem()
     {
-        intakeRollers = new VictorSP(Constants.INTAKE_MOTOR_PORT);
-        leftIntakeRotation = new VictorSP(Constants.LEFT_INTAKE_ROTATION_MOTOR_PORT);
-        rightIntakeRotation = new VictorSP(Constants.RIGHT_INTAKE_ROTATION_MOTOR_PORT);
+        intakeRollers = new VictorSP(Constants.INTAKE_ROLLER_MOTOR_PORT);
+        leftIntakeRotation = new VictorSP(Constants.LEFT_INTAKE_ACTUATION_MOTOR_PORT);
+        rightIntakeRotation = new VictorSP(Constants.RIGHT_INTAKE_ACTUATION_MOTOR_PORT);
     }
 
     public void periodic()
