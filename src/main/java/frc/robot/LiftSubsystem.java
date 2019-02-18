@@ -1,13 +1,34 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LiftSubsystem
 {
     boolean liftUnlocked = false;
     
-    Solenoid leftFront, rightFront, leftBack, rightBack;
-    Solenoid[] lift, frontLift, backLift;
+    /**Solenoid controlling the left front climber piston*/
+    Solenoid leftFront;
+    /**Solenoid controlling the right front climber piston*/
+    Solenoid rightFront;
+    /**Solenoid controlling the left back climber piston*/
+    Solenoid leftBack;
+    /**Solenoid controlling the right back climber piston*/
+    Solenoid rightBack;
+    /**Solenoid array controlling all climber pistons */
+    Solenoid[] lift;
+    /**Solenoid array controlling front climber pistons */
+    Solenoid[] frontLift;
+    /**Solenoid array controlling back climber pistons */
+    Solenoid[] backLift;
+    /**Is the front left piston active? */
+    boolean flActive = false;
+    /**Is the front right piston active? */
+    boolean frActive = false;
+    /**Is the back left piston active? */
+    boolean blActive = false;
+    /**Is the back right piston active? */
+    boolean brActive = false;
 
     LiftSubsystem()
     {
@@ -63,5 +84,19 @@ public class LiftSubsystem
     {
         if(activate = true)
             liftUnlocked = true;
+    }
+
+    /**Sets SmartDashboard values for LiftSubsystem periodically*/
+    public void periodic()
+    {
+        flActive = leftFront.get();
+        frActive = rightFront.get();
+        blActive = leftBack.get();
+        brActive = rightBack.get();
+
+        SmartDashboard.putBoolean("flActive", flActive);
+        SmartDashboard.putBoolean("frActive", frActive);
+        SmartDashboard.putBoolean("blActive", blActive);
+        SmartDashboard.putBoolean("brActive", brActive);
     }
 }

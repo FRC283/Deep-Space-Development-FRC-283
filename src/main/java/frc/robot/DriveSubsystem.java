@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem
 {
-    TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
-
-    
+    TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;   
 
     DriveSubsystem()
     {
@@ -22,7 +20,6 @@ public class DriveSubsystem
         backLeftDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         frontRightDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         backRightDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
     }
     /**
      * Function for controlling the motor controllers on the robot.
@@ -40,6 +37,8 @@ public class DriveSubsystem
 		backLeftDrive.set(ControlMode.PercentOutput, (-rXMag - lYMag + lXMag) * -1);
 		backRightDrive.set(ControlMode.PercentOutput, (rXMag - lYMag - lXMag) * 1);	
     }
+
+    /**Sets SmartDashboard values for DriveSubsystem periodically */
     public void periodic()
     {
         SmartDashboard.putNumber("FrontLeftDrive Encoder Value", frontLeftDrive.getSelectedSensorPosition(0));
@@ -51,6 +50,7 @@ public class DriveSubsystem
         SmartDashboard.putNumber("FrontRightDrive Encoder Velocity", frontRightDrive.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("BackRightDrive Encoder Velocity", backRightDrive.getSelectedSensorVelocity(0));
     }
+
     public void resetter()
     {
     }

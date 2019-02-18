@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmSubsystem
 {
@@ -11,12 +12,12 @@ public class ArmSubsystem
     Encoder elbowEnc;
     Servo cameraSer;
     Boolean isPositioning = false;
-    /** */
-    double target; 
-    /** */
-    double pos;
-    /**armEnc feeds out voltage 0-5V corresponding to degree measures; 5V = 359deg */ 
-    double current;
+    /**Current target of elbow*/
+    static double target; 
+    /**Current position of elbow*/
+    static double pos;
+    /**Current elbow motor speed*/ 
+    static double currentElbowSpeed;
     private static final double speed = .5;
     private static final int LOW_CARGO = 30;
     private static final int LOW_HATCH = 35;
@@ -43,11 +44,16 @@ public class ArmSubsystem
         cameraSer = new Servo(Constants.CAMERA_SERVO_PORT);
     
     }
-
+    /** 
+     *Set SmartDashboard values for ArmSubsystem periodically
+    */
     public void periodic()
     {
-        current = elbowMotor.getSpeed();
+        currentElbowSpeed = elbowMotor.getSpeed();
         pos = elbowEnc.get();//Divide VoltIn by Volts per degree ~0.1389V
+        SmartDashboard.putNumber("ElbowMotorSpeed", currentElbowSpeed);
+        SmartDashboard.putNumber("ElbowEncValue", pos);
+        SmartDashboard.putNumber("currentElbowTarget", target);
     }
 
     /**
@@ -61,12 +67,10 @@ public class ArmSubsystem
      *      'm' - middle position
      *      'h' - highest position
      * @param isHatch - If true, goes to corresponding Hatch Position, otherwise it goes to Cargo position
+     * @value isPositioning allows or blocks the arm from moving
      */
     public void rotate(char position, boolean isHatch)
     {
-
-        //
-
         //rotatePeriodic(position, isHatch);
         if(isPositioning == false)
         {
@@ -104,12 +108,13 @@ public class ArmSubsystem
 
 
     /**
-     * periodic check to see if arm is at position
+     * Periodic check to see if arm is at position
+     * @value isPositioning allows or blocks the arm from moving
      */
     public void rotatePeriodic()
     {   
         //if the arm has reached its target, stop
-        if(((current > 0) && (target <= pos)) ||((current < 0) && (target >= pos)))
+        if(((currentElbowSpeed > 0) && (target <= pos)) ||((currentElbowSpeed < 0) && (target >= pos)))
         {
             elbowMotor.set(0);
             isPositioning = false;

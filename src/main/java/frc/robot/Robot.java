@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
     arm.periodic();
     drive.periodic();
     intake.periodic();
+    lift.periodic();
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
     arm.rotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
     lift.unlockLift(logitech.getRawButton(Constants.BACK));

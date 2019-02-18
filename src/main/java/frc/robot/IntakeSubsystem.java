@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem
 {
@@ -20,6 +21,8 @@ public class IntakeSubsystem
     public static boolean intakeRunPrev;
     /**Speed of the intake rollers*/
     private static final double ROLLER_SPEED_MAGNITUDE = 1/4;
+    /**Current speed of intake rollers*/
+    private static double intakeSpeed;
 
     IntakeSubsystem()
     {
@@ -28,9 +31,15 @@ public class IntakeSubsystem
         rightIntakeRotation = new VictorSP(Constants.RIGHT_INTAKE_ACTUATION_MOTOR_PORT);
     }
 
+    /**
+     * Sets SmartDashboard values for IntakeSubsystem periodically
+     */
     public void periodic()
     {
+        intakeSpeed = intakeRollers.getSpeed();
         
+        SmartDashboard.putNumber("intakeSpeed", intakeSpeed);
+        SmartDashboard.putBoolean("intakeDirection", intakeDir);
     }
 
     /**
