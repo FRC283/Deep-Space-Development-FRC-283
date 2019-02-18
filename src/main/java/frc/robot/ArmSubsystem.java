@@ -12,11 +12,11 @@ public class ArmSubsystem
 
     ArmSubsystem()
     {
-        armMotor = new Victor(Constants.ARM_MOTOR_PORT);
+        armMotor = new Victor(Constants.ELBOW_MOTOR_PORT);
         leftWristMotor = new Victor(Constants.LEFT_WRIST_MOTOR_PORT);
         rightWristMotor = new Victor(Constants.RIGHT_WRIST_MOTOR_PORT);
 
-        armEnc = new AnalogInput(Constants.ARM_ENCODER_PORT_A);
+        armEnc = new AnalogInput(Constants.ELBOW_ENCODER_PORT_A);
         leftWristEnc = new AnalogInput(Constants.LEFT_WRIST_ENCODER_PORT_A);
         rightWristEnc = new AnalogInput(Constants.RIGHT_WRIST_ENCODER_PORT_A);
 
