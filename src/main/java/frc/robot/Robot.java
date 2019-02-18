@@ -101,13 +101,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
+    arm.periodic();
+    drive.periodic();
+    intake.periodic();
     drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
-    arm.periodic();
     arm.rotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
-    arm.periodic();
     lift.unlockLift(logitech.getRawButton(Constants.BACK));
     lift.liftPistons(xbox.getRawButton(Constants.A), xbox.getRawButton(Constants.X), xbox.getRawButton(Constants.B));
-    drive.periodic();
   }
 
   /**

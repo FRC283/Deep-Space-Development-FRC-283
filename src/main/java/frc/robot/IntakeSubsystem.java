@@ -4,15 +4,21 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public class IntakeSubsystem
 {
-    /**
-     * @var intakeRollers - Motor controller that controls the wheels that intake balls
-     * @var leftIntakeRotation - Motor controller on the left (when looking at front of robot) for the intake arm rotation
-     * @var rightIntakeRotation - Motor controller on the right (when looking at front of robot) for the intake arm rotation
-     * @var ROLLER_SPEED_MAGNITUDE - speed of the intake rollers
-     */
+    /**Motor controller that controls the wheels that intake balls*/
     VictorSP intakeRollers;
+    /**Motor controller on the left (when looking at front of robot) for the intake arm rotation */
     VictorSP leftIntakeRotation;
+    /**Motor controller on the right (when looking at front of robot) for the intake arm rotation */
     VictorSP rightIntakeRotation;
+    /**Direction of intake (true - inward, false - outward)*/
+    public static boolean intakeDir = false;
+    /**Previous state of direction toggle*/
+    public static boolean intakeDirPrev;
+    /**Toggle of intake (true - spinning, false - stopped) */
+    public static boolean intakeRunTog = false;
+    /**prevoius state of the running toggle*/
+    public static boolean intakeRunPrev;
+    /**Speed of the intake rollers*/
     private static final double ROLLER_SPEED_MAGNITUDE = 1/4;
 
     IntakeSubsystem()
@@ -38,12 +44,20 @@ public class IntakeSubsystem
     }
     /**
      * controls the intake on the robot
-     * @param dir - direction that the intake wheels is moving in, toggle between inwards(default) and outwards
-     * @param running - if the wheels are running, toggle between on and off(default)
+     * @param dirTog - direction that the intake wheels is moving in, toggle between inwards(default) and outwards
+     * @param runTog - if the wheels are running, toggle between on and off(default)
      */
-    public void intake(boolean dir,boolean running) 
+    public void intake(boolean dirTog,boolean runTog) 
     {
-        if(running)
-            intakeRollers.set(ROLLER_SPEED_MAGNITUDE*(dir?-1:1));
+        if(dirTog && !intakeDirPrev)
+            intakeDir = !intakeDir;
+        if(runTog && !intakeRunPrev)
+            intakeRunTog = !intakeRunTog;
+        if(intakeRunTog)
+            intakeRollers.set(ROLLER_SPEED_MAGNITUDE*(intakeDir?-1:1));
+        else
+            intakeRollers.set(0);
+        intakeDirPrev = dirTog;
+        intakeRunPrev = runTog;
     }
 }
