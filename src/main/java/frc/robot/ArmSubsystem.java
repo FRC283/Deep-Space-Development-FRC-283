@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmSubsystem
 {
     //Number of seconds to keep the kicker extended  
-    private static final double CARGO_KICKER_TIMER_DURATION = 2;
-    private static final double HATCH_KICKER_TIMER_DURATION = 2;
+    private static final double CARGO_KICKER_TIMER_DURATION = 1;
+    private static final double HATCH_KICKER_TIMER_DURATION = 1;
     Timer cargoKickerTimer;
     Timer hatchKickerTimer;
     boolean grippersClosed = false;
@@ -22,8 +22,8 @@ public class ArmSubsystem
     AnalogInput  leftWristEnc, rightWristEnc;
     DigitalInput elbowUpperLimitSwitch;
     DigitalInput elbowLowerLimitSwitch;
-    Encoder elbowEnc;
-    Servo cameraSer;
+    Encoder elbowEncoder;
+    Servo cameraServo;
     Boolean isPositioning = false;
     /**Current target of elbow*/
     static double target; 
@@ -42,7 +42,7 @@ public class ArmSubsystem
     private static final double LEFT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double RIGHT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double MAX_ELBOW_SPEED_AUTO = .25;
-    private static final double MAX_ELBOW_SPEED_MANUAL = .75;
+    private static final double MAX_ELBOW_SPEED_MANUAL = .25;
     private static final int LOW_CARGO = -441;
     private static final int LOW_HATCH = -243;
     private static final int MID_CARGO = -805;
@@ -57,11 +57,13 @@ public class ArmSubsystem
     {
         loadedSubsystems = new HashMap<String, Object>();
 
+        //Motor Controllers
         elbowMotor = new Victor(Constants.ELBOW_MOTOR_PORT);
         leftWristMotor = new Victor(Constants.LEFT_WRIST_MOTOR_PORT);
         rightWristMotor = new Victor(Constants.RIGHT_WRIST_MOTOR_PORT);
 
-        elbowEnc = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
+        //Encoders
+        elbowEncoder = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
         leftWristEnc = new AnalogInput(Constants.LEFT_WRIST_ENCODER_PORT_A);
         rightWristEnc = new AnalogInput(Constants.RIGHT_WRIST_ENCODER_PORT_A);
 
@@ -69,11 +71,12 @@ public class ArmSubsystem
         elbowUpperLimitSwitch = new DigitalInput(Constants.ELBOW_UPPER_LIMIT_SWITCH);
         elbowLowerLimitSwitch = new DigitalInput(Constants.ELBOW_LOWER_LIMIT_SWITCH);
 
+        //Wrist Solenoids
         gripSol = new Solenoid(Constants.GRIPPER_PORT);
         cargoSol = new Solenoid(Constants.CARGO_KICKER_PORT);
         hatchSol = new Solenoid(Constants.HATCH_RELEASE_PORT);
 
-        cameraSer = new Servo(Constants.CAMERA_SERVO_PORT);
+        cameraServo = new Servo(Constants.CAMERA_SERVO_PORT);
 
         //Timers for solenoids
         cargoKickerTimer = new Timer();
@@ -83,20 +86,23 @@ public class ArmSubsystem
     
     }
 
-    /** 
-     *Set SmartDashboard values for ArmSubsystem periodically
-    */
+    /**
+     * Called every teleop periodic cycle
+     * 
+     * Calls wristPeriodic() and rotatePeriodic()
+     * @see wristPeriodic()
+     * @see rotatePeriodic()
+     */
     public void periodic()
     {
         currentElbowSpeed = elbowMotor.getSpeed();
-        //Divide VoltIn by Volts per degree ~0.1389V
         SmartDashboard.putNumber("ElbowMotorSpeed", currentElbowSpeed);
         SmartDashboard.putNumber("ElbowEncValue", pos);
         SmartDashboard.putNumber("currentElbowTarget", target);
         SmartDashboard.putNumber("error", target - pos);
         SmartDashboard.putNumber("P_Coefficient * error", P_COEFFICIENT * (target - pos));
         wristPeriodic();
-        //rotatePeriodic();
+        rotatePeriodic();
     }
 
     /**
@@ -114,7 +120,6 @@ public class ArmSubsystem
      */
     public void rotate(char position, boolean isHatch)
     {
-        //rotatePeriodic(position, isHatch);
             switch(position)
             {
                 case 'l':
@@ -124,19 +129,22 @@ public class ArmSubsystem
                         //Move to low
                         // if the hatch is selected, go for hatch, otherwise, go to cargo
                         target = ((isHatch ? LOW_HATCH : LOW_CARGO) + OFFSET);
+                        isPositioning = true;
                     break;
                 case 'm':
                         target = ((isHatch ? MID_HATCH : MID_CARGO) + OFFSET);
+                        isPositioning = true;
                     break;
                 case 'h':
                         target = ((isHatch ? HIGH_HATCH : HIGH_CARGO) + OFFSET);
+                        isPositioning = true;
                     break;
                 case 'b':
                         target = 0;
+                        isPositioning = true;
                 default:
                     elbowMotor.set(0);
             }
-            //elbowMotor.set((pos < target) ? (speed) : ((pos > target) ? (-(speed)) : 0));
     }
     /**
      * Determines position for arm based on button combinations
@@ -173,13 +181,27 @@ public class ArmSubsystem
      */
     public void manualRotate(double armMag, double wristMag)
     {
-
-        elbowMotor.set(armMag * MAX_ELBOW_SPEED_MANUAL);
+        if(armMag > Constants.DEAD_ZONE || armMag < (-Constants.DEAD_ZONE))
+        {
+            armMag = armMag-Constants.DEAD_ZONE;
+            armMag = Math.max(Math.min(armMag, MAX_ELBOW_SPEED_MANUAL), -MAX_ELBOW_SPEED_MANUAL);
+            elbowMotor.set(armMag);
+            isPositioning = false;
+        }
+        else if(!isPositioning && !(armMag > Constants.DEAD_ZONE || armMag < (-Constants.DEAD_ZONE) ))
+        {
+            elbowMotor.set(0);
+        }
 
         if(wristMag > Constants.DEAD_ZONE || wristMag < (-Constants.DEAD_ZONE))
         {
             leftWristMotor.set(LEFT_WRIST_SPEED_MULTIPLIER * wristMag);
             rightWristMotor.set(RIGHT_WRIST_SPEED_MULTIPLIER * -wristMag);
+        }
+        else
+        {
+            leftWristMotor.set(0);
+            rightWristMotor.set(0);
         }
         
     }
@@ -191,41 +213,43 @@ public class ArmSubsystem
      */
     public void rotatePeriodic()
     {   
-        pos = elbowEnc.get();
-        //if the arm has reached its target, stop
-        //if(((currentElbowSpeed > 0) && (target <= pos)) || ((currentElbowSpeed < 0) && (target >= pos)))
+        if(isPositioning)
+        {
+            pos = elbowEncoder.get();
             error = P_COEFFICIENT * (target - pos);
 
-        SmartDashboard.putNumber("Error before check", error);
+            SmartDashboard.putNumber("Error before check", error);
 
-        if(!elbowLowerLimitSwitch.get())
-        {
-            elbowEnc.reset();
-        }
-
-        if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
-             && (elbowEnc.get() <= 0))
-        {
-            //Force error to be within -.1 and .1
-            error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
-            
-            if(error > 0 && !elbowLowerLimitSwitch.get())
+            if(!elbowLowerLimitSwitch.get())
             {
-                elbowMotor.set(error);
+                elbowEncoder.reset();
+            }
+
+            if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
+                && (elbowEncoder.get() <= 0))
+            {
+                //Force error to be within -.1 and .1
+                error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
+                
+                if(error > 0 && !elbowLowerLimitSwitch.get())
+                {
+                    elbowMotor.set(error);
+                }
+                else
+                {
+                    elbowMotor.set(0);
+                }
+                
             }
             else
             {
+                //TODO: implement unlocking
+                //Unlock locked actuator
+                //Remove subsystems from locked actuators list
                 elbowMotor.set(0);
             }
-            
         }
-        else
-        {
-            //TODO: implement unlocking
-            //Unlock locked actuator
-            //Remove subsystems from locked actuators list
-            elbowMotor.set(0);
-        }
+        
         SmartDashboard.putNumber("Position Target", target);
         SmartDashboard.putBoolean("Positioning", isPositioning);
         SmartDashboard.putNumber("MotorValue", error);
@@ -257,6 +281,7 @@ public class ArmSubsystem
 
     /**
      * This is the function to be called inside the Robot class
+     * for controlling the solenoids on the wrist
      * 
      * @param toggleGrippers - Passed as the parameter to actuateGrippers
      * @see actuateGrippers(boolean toggle)
