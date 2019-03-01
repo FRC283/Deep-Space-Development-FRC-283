@@ -10,6 +10,7 @@ public class DriveSubsystem
 {
     TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;   
 
+    Utilities283 utils;
     DriveSubsystem()
     {
         frontLeftDrive = new TalonSRX(Constants.FRONT_LEFT_DRIVE_PORT);
@@ -32,10 +33,10 @@ public class DriveSubsystem
      */
     public void drive(double lYMag, double lXMag, double rXMag)
     {
-        frontLeftDrive.set(ControlMode.PercentOutput, (rXMag + lYMag + lXMag) * 1);
-		frontRightDrive.set(ControlMode.PercentOutput, (-rXMag + lYMag - lXMag) * -1);
-		backLeftDrive.set(ControlMode.PercentOutput, (-rXMag - lYMag + lXMag) * -1);
-		backRightDrive.set(ControlMode.PercentOutput, (rXMag - lYMag - lXMag) * 1);	
+        frontLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag + lYMag + lXMag) * 1));		
+        frontRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag + lYMag - lXMag) * -1));
+		backLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag - lYMag + lXMag) * -1));
+		backRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag - lYMag - lXMag) * 1));	
     }
 
     /**Sets SmartDashboard values for DriveSubsystem periodically */

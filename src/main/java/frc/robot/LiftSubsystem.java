@@ -32,7 +32,7 @@ public class LiftSubsystem
 
     LiftSubsystem()
     {
-        leftFront = new Solenoid(Constants.FRONT_LEFT_LIFT_PORT);
+        /*leftFront = new Solenoid(Constants.FRONT_LEFT_LIFT_PORT);
         rightFront = new Solenoid(Constants.FRONT_RIGHT_LIFT_PORT);
         leftBack = new Solenoid(Constants.BACK_LEFT_LIFT_PORT);
         rightBack = new Solenoid(Constants.BACK_RIGHT_LIFT_PORT);
@@ -40,6 +40,7 @@ public class LiftSubsystem
         lift = new Solenoid[] {leftFront, rightFront, leftBack, rightBack}; 
         frontLift = new Solenoid[] {leftFront, rightFront};
         backLift = new Solenoid[] {leftBack, rightBack};
+        */
     }
 
     /**

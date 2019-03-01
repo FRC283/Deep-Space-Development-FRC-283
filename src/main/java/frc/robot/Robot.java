@@ -9,6 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,7 +32,15 @@ public class Robot extends TimedRobot {
   ArmSubsystem arm;
   IntakeSubsystem intake;
   LiftSubsystem lift;
+  Utilities283 utils;
   Joystick logitech, xbox;
+  //Encoder elbowEnc;
+  //DigitalInput elbowUpperLimitSwitch;
+  //DigitalInput elbowLowerLimitSwitch;
+  //Encoder rotateEncoder;
+  //DigitalInput intakeUpperLimitSwitch;
+
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -40,38 +50,27 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    /*elbowEnc = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
+    elbowUpperLimitSwitch = new DigitalInput(Constants.ELBOW_UPPER_LIMIT_SWITCH);
+    elbowLowerLimitSwitch = new DigitalInput(Constants.ELBOW_LOWER_LIMIT_SWITCH);
+    */
+    //rotateEncoder = new Encoder(Constants.INTAKE_ROTATION_ENCODER_PORT_A, Constants.INTAKE_ROTATION_ENCODER_PORT_B);
+    //intakeUpperLimitSwitch = new DigitalInput(Constants.INTAKE_UPPER_LIMIT_SWITCH);
     drive = new DriveSubsystem();
     arm = new ArmSubsystem();
     intake = new IntakeSubsystem();
-    lift = new LiftSubsystem();
+    //lift = new LiftSubsystem();
     logitech = new Joystick(Constants.LOGITECH_PORT);
     xbox = new Joystick(Constants.XBOX_PORT);
     CameraServer.getInstance().startAutomaticCapture();
   }
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
-   */
+  /**   */
   @Override
   public void robotPeriodic() {
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
-   */
+  /**   */
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
@@ -84,6 +83,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    /*
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
         // Put default auto code here
         break;
     }
+    */
   }
 
   /**
@@ -101,14 +102,41 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
+    
     arm.periodic();
     drive.periodic();
     intake.periodic();
-    lift.periodic();
-    drive.drive(logitech.getRawAxis(Constants.LEFT_Y), logitech.getRawAxis(Constants.LEFT_X), logitech.getRawAxis(Constants.RIGHT_X));
-    arm.rotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
-    lift.unlockLift(logitech.getRawButton(Constants.BACK));
-    lift.liftPistons(xbox.getRawButton(Constants.A), xbox.getRawButton(Constants.X), xbox.getRawButton(Constants.B));
+    //lift.periodic();
+
+    drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
+                logitech.getRawAxis(Constants.LEFT_X), 
+                logitech.getRawAxis(Constants.RIGHT_X));
+    
+    //arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
+    
+    arm.rotate(xbox.getRawButton(Constants.START), 
+                xbox.getRawButton(Constants.B),
+                xbox.getRawButton(Constants.A), 
+                xbox.getRawButton(Constants.X));
+
+    SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEnc.get());
+    SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
+    SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get()); 
+             
+
+    arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
+                     xbox.getRawButton(Constants.LEFT_BUMPER),
+                     xbox.getRawButton(Constants.RIGHT_BUMPER)); 
+                     
+    arm.rotatePeriodic();
+    //lift.unlockLift(logitech.getRawButton(Constants.BACK));
+    //lift.liftPistons(xbox.getRawButton(Constants.A), 
+    //               xbox.getRawButton(Constants.X), 
+    //               xbox.getRawButton(Constants.B));
+    
+    intake.rotate(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER),
+                  logitech.getRawButton(Constants.BACK));
+    intake.intake(logitech.getRawButton(Constants.A), logitech.getRawButton(Constants.Y));
   }
 
   /**
@@ -116,5 +144,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    /*
+    */ 
+    //SmartDashboard.putNumber("Intake Rotation Encoder Val", rotateEncoder.get());
+    //SmartDashboard.putBoolean("Intake Rotation Limit Switch", intakeUpperLimitSwitch.get());
   }
 }
