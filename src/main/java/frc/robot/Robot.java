@@ -73,9 +73,7 @@ public class Robot extends TimedRobot {
   /**   */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    
   }
 
   /**
@@ -94,6 +92,7 @@ public class Robot extends TimedRobot {
         break;
     }
     */
+    periodic();
   }
 
   /**
@@ -102,7 +101,21 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    
+    periodic();
+  }
+
+  /**
+   * This function is called periodically during test mode.
+   */
+  @Override
+  public void testPeriodic() {
+    /*
+    */ 
+    //SmartDashboard.putNumber("Intake Rotation Encoder Val", rotateEncoder.get());
+    //SmartDashboard.putBoolean("Intake Rotation Limit Switch", intakeUpperLimitSwitch.get());
+  }
+  public void periodic()
+  {
     arm.periodic();
     drive.periodic();
     intake.periodic();
@@ -112,9 +125,10 @@ public class Robot extends TimedRobot {
                 logitech.getRawAxis(Constants.LEFT_X), 
                 logitech.getRawAxis(Constants.RIGHT_X));
     
-    //arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
+    arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
     
-    arm.rotate(xbox.getRawButton(Constants.START), 
+    arm.rotate(xbox.getRawButton(Constants.BACK),
+                xbox.getRawButton(Constants.START), 
                 xbox.getRawButton(Constants.B),
                 xbox.getRawButton(Constants.A), 
                 xbox.getRawButton(Constants.X));
@@ -127,26 +141,14 @@ public class Robot extends TimedRobot {
     arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
                      xbox.getRawButton(Constants.LEFT_BUMPER),
                      xbox.getRawButton(Constants.RIGHT_BUMPER)); 
-                     
-    arm.rotatePeriodic();
     //lift.unlockLift(logitech.getRawButton(Constants.BACK));
     //lift.liftPistons(xbox.getRawButton(Constants.A), 
     //               xbox.getRawButton(Constants.X), 
     //               xbox.getRawButton(Constants.B));
     
-    intake.rotate(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER),
-                  logitech.getRawButton(Constants.BACK));
-    intake.intake(logitech.getRawButton(Constants.A), logitech.getRawButton(Constants.Y));
-  }
-
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
-    /*
-    */ 
-    //SmartDashboard.putNumber("Intake Rotation Encoder Val", rotateEncoder.get());
-    //SmartDashboard.putBoolean("Intake Rotation Limit Switch", intakeUpperLimitSwitch.get());
+    intake.intake(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER));
+    intake.rotate((logitech.getRawAxis(Constants.LEFT_TRIGGER) >= 0.5), (logitech.getRawAxis(Constants.RIGHT_TRIGGER) >= 0.5),
+    logitech.getRawButton(Constants.BACK));
+  
   }
 }

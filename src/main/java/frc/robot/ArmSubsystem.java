@@ -42,7 +42,7 @@ public class ArmSubsystem
     private static final double LEFT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double RIGHT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double MAX_ELBOW_SPEED_AUTO = .25;
-    private static final double MAX_ELBOW_SPEED_MANUAL = .5;
+    private static final double MAX_ELBOW_SPEED_MANUAL = .75;
     private static final int LOW_CARGO = -441;
     private static final int LOW_HATCH = -243;
     private static final int MID_CARGO = -805;
@@ -95,6 +95,8 @@ public class ArmSubsystem
         SmartDashboard.putNumber("currentElbowTarget", target);
         SmartDashboard.putNumber("error", target - pos);
         SmartDashboard.putNumber("P_Coefficient * error", P_COEFFICIENT * (target - pos));
+        wristPeriodic();
+        //rotatePeriodic();
     }
 
     /**
@@ -129,6 +131,8 @@ public class ArmSubsystem
                 case 'h':
                         target = ((isHatch ? HIGH_HATCH : HIGH_CARGO) + OFFSET);
                     break;
+                case 'b':
+                        target = 0;
                 default:
                     elbowMotor.set(0);
             }
@@ -141,7 +145,7 @@ public class ArmSubsystem
      * @param goForMidPos - middle position for hatch and cargo
      * @param goForHighPos - high position for hatch and cargo
      */
-    public void rotate(boolean isHatch, boolean goForLowPos, boolean goForMidPos, boolean goForHighPos)
+    public void rotate(boolean isHatch, boolean goToStartPos, boolean goForLowPos, boolean goForMidPos, boolean goForHighPos)
     {
         if(goForLowPos)
         {
@@ -154,6 +158,10 @@ public class ArmSubsystem
         else if(goForHighPos)
         {
             this.rotate('h', isHatch);
+        }
+        else if (goToStartPos)
+        {
+            this.rotate('b', isHatch);
         }
     }
 
@@ -196,12 +204,20 @@ public class ArmSubsystem
         }
 
         if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
-             && elbowUpperLimitSwitch.get() 
              && (elbowEnc.get() <= 0))
         {
             //Force error to be within -.1 and .1
             error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
-            elbowMotor.set(error);
+            
+            if(error > 0 && !elbowLowerLimitSwitch.get())
+            {
+                elbowMotor.set(error);
+            }
+            else
+            {
+                elbowMotor.set(0);
+            }
+            
         }
         else
         {
