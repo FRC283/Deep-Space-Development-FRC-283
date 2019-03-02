@@ -33,8 +33,8 @@ public class Constants
 
 
 			//VictorSPX
-			public static final int FRONT_LEFT_LIFT_PORT = 0;
-			public static final int FRONT_RIGHT_LIFT_PORT = 1;
+			public static final int FRONT_LEFT_LIFT_PORT = 6;
+			public static final int FRONT_RIGHT_LIFT_PORT = 7;
 			//TalonSRX
 			public static final int BACK_LEFT_LIFT_PORT = 4;
 			public static final int BACK_RIGHT_LIFT_PORT = 5;
@@ -58,10 +58,10 @@ public class Constants
 			public static final int ELBOW_UPPER_LIMIT_SWITCH = 8;
 			public static final int ELBOW_LOWER_LIMIT_SWITCH = 9;
 			public static final int LIFT_FRONT_LEFT_LIMIT_SWITCH = 6;
-			public static final int LIFT_FRONT_RIGHT_LIMIT_SWITCH = 7;
-			public static final int LIFT_BACK_RIGHT_LIMIT_SWITCH = 5;
+			public static final int LIFT_FRONT_RIGHT_LIMIT_SWITCH = 5;
+			public static final int LIFT_BACK_RIGHT_LIMIT_SWITCH = 7;
 		//Analog
-			public static final int LEFT_WRIST_ENCODER_PORT_A = 1;
+			public static final int LEFT_WRIST_ENCODER_PORT_A = 0;
 			//public static final int LEFT_WRIST_ENCODER_PORT_B = 3;
 			public static final int RIGHT_WRIST_ENCODER_PORT_A = 2;
 			//public static final int RIGHT_WRIST_ENCODER_PORT_B = 5;

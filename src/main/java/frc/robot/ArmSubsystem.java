@@ -64,8 +64,8 @@ public class ArmSubsystem
 
         //Encoders
         elbowEncoder = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
-        leftWristEnc = new AnalogInput(Constants.LEFT_WRIST_ENCODER_PORT_A);
-        rightWristEnc = new AnalogInput(Constants.RIGHT_WRIST_ENCODER_PORT_A);
+        //leftWristEnc = new AnalogInput(Constants.LEFT_WRIST_ENCODER_PORT_A);
+        //rightWristEnc = new AnalogInput(Constants.RIGHT_WRIST_ENCODER_PORT_A);
 
         //Limit Switches
         elbowUpperLimitSwitch = new DigitalInput(Constants.ELBOW_UPPER_LIMIT_SWITCH);

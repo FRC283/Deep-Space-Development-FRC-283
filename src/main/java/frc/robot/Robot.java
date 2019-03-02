@@ -9,11 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -101,15 +97,15 @@ public class Robot extends TimedRobot {
   public void periodic()
   {
     //arm.periodic();
-    drive.periodic();
+    //drive.periodic();
     intake.periodic();
     lift.periodic();
 
-    drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
+    /*drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
                 logitech.getRawAxis(Constants.LEFT_X), 
-                logitech.getRawAxis(Constants.RIGHT_X));
+                logitech.getRawAxis(Constants.RIGHT_X));*/
     
-    arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
+    //arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
     
     //arm.rotate(xbox.getRawButton(Constants.BACK),
     //           xbox.getRawButton(Constants.START), 
@@ -117,18 +113,19 @@ public class Robot extends TimedRobot {
     //           xbox.getRawButton(Constants.A), 
     //          xbox.getRawButton(Constants.X));
 
-    SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEncoder.get());
-    SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
-    SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get()); 
+    //SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEncoder.get());
+    //SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
+    //SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get()); 
              
-    /* arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
+    /*arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
                      xbox.getRawButton(Constants.LEFT_BUMPER),
-                     xbox.getRawButton(Constants.RIGHT_BUMPER)); */
+                     xbox.getRawButton(Constants.RIGHT_BUMPER));*/
     
     intake.intake(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER));
     intake.rotate((logitech.getRawAxis(Constants.LEFT_TRIGGER) >= 0.5), 
                   (logitech.getRawAxis(Constants.RIGHT_TRIGGER) >= 0.5),
                    logitech.getRawButton(Constants.BACK));
+    //               */
 
     lift.unlockLift(xbox.getRawButton(Constants.BACK));
     lift.actuateLift(xbox.getRawButton(Constants.A),
