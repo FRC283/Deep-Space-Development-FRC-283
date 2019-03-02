@@ -181,6 +181,11 @@ public class ArmSubsystem
             leftWristMotor.set(LEFT_WRIST_SPEED_MULTIPLIER * wristMag);
             rightWristMotor.set(RIGHT_WRIST_SPEED_MULTIPLIER * -wristMag);
         }
+        else
+        {
+            leftWristMotor.set(0);
+            rightWristMotor.set(0);
+        }
         
     }
 
