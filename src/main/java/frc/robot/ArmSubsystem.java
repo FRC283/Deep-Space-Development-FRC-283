@@ -183,14 +183,15 @@ public class ArmSubsystem
     {
         if(armMag > Constants.DEAD_ZONE || armMag < (-Constants.DEAD_ZONE))
         {
+            //armMag is a value between 0 and 1, this makes the max target change +/- 10 
+            target = target + (10 * armMag);
+            
+            /*
             armMag = armMag-Constants.DEAD_ZONE;
             armMag = Math.max(Math.min(armMag, MAX_ELBOW_SPEED_MANUAL), -MAX_ELBOW_SPEED_MANUAL);
             elbowMotor.set(armMag);
             isPositioning = false;
-        }
-        else if(!isPositioning && !(armMag > Constants.DEAD_ZONE || armMag < (-Constants.DEAD_ZONE) ))
-        {
-            elbowMotor.set(0);
+            */
         }
 
         if(wristMag > Constants.DEAD_ZONE || wristMag < (-Constants.DEAD_ZONE))
@@ -213,41 +214,31 @@ public class ArmSubsystem
      */
     public void rotatePeriodic()
     {   
-        if(isPositioning)
+        pos = elbowEncoder.get();
+        error = P_COEFFICIENT * (target - pos);
+
+        SmartDashboard.putNumber("Error before check", error);
+
+        if(!elbowLowerLimitSwitch.get())
         {
-            pos = elbowEncoder.get();
-            error = P_COEFFICIENT * (target - pos);
+            elbowEncoder.reset();
+        }
 
-            SmartDashboard.putNumber("Error before check", error);
-
-            if(!elbowLowerLimitSwitch.get())
+        if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
+            && (elbowEncoder.get() <= 0))
+        {
+            //Force error to be within -.1 and .1
+            error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
+            
+            if(error > 0 && !elbowLowerLimitSwitch.get())
             {
-                elbowEncoder.reset();
-            }
-
-            if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
-                && (elbowEncoder.get() <= 0))
-            {
-                //Force error to be within -.1 and .1
-                error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
-                
-                if(error > 0 && !elbowLowerLimitSwitch.get())
-                {
-                    elbowMotor.set(error);
-                }
-                else
-                {
-                    elbowMotor.set(0);
-                }
-                
+                elbowMotor.set(error);
             }
             else
             {
-                //TODO: implement unlocking
-                //Unlock locked actuator
-                //Remove subsystems from locked actuators list
                 elbowMotor.set(0);
             }
+            
         }
         
         SmartDashboard.putNumber("Position Target", target);
