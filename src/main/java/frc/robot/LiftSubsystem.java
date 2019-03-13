@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class LiftSubsystem
 {
-    private static final double LIFT_MOTOR_SPEED_MAGNITUDE = .1;
+    private static final double LIFT_MOTOR_SPEED_MAGNITUDE = .25;
 
     boolean liftUnlocked = false;
     TalonSRX frontLeft;
@@ -54,39 +54,64 @@ public class LiftSubsystem
      */
     public void actuateLift(boolean extendAll, boolean retractFront, boolean retractBack)
     {
+        //unlockLift() must be called before the lift can be actuated
         if(liftUnlocked)
         {
             if(extendAll)
             {
                 if(!retractFront)
                 {
-                    frontRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                    frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + .1);
+                    frontRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) - .2);
                 }
                 
                 if(!retractBack)
                 {
+                    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                     backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                    backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
                 }    
             }
 
             if(retractFront)
             {
-                if(frontRightLimitSwitch.get() || frontLeftLimitSwitch.get())
+                if(frontRightLimitSwitch.get())
                 {
-                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
+                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + .2);
+                }
+                else
+                {
+                    frontRight.set(ControlMode.PercentOutput, 0);
+                }
+
+                if(frontLeftLimitSwitch.get())
+                {
+                    frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE - .1);
+                }
+                else
+                {
+                    frontLeft.set(ControlMode.PercentOutput, 0);
                 }
             }
             
 
             if(retractBack)
             {
-                if(backRightLimitSwitch.get() || (backLeftLimitSwitch.getVoltage() < .5))
+                if(backRightLimitSwitch.get())
+                {
+                    backRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                }
+                else
+                {
+                    backRight.set(ControlMode.PercentOutput, 0);
+                }
+
+                if(backLeftLimitSwitch.getVoltage() < .5)
                 {
                     backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                    backRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                }
+                else
+                {
+                    backLeft.set(ControlMode.PercentOutput, 0);
                 }
             }
 
@@ -95,6 +120,7 @@ public class LiftSubsystem
                 frontLeft.set(ControlMode.PercentOutput, 0);
                 frontRight.set(ControlMode.PercentOutput, 0);
             }
+
 
             if(!extendAll && !retractBack)
             {

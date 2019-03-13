@@ -227,8 +227,8 @@ public class ArmSubsystem
         if ((error > ERROR_UPPER_ACCEPTABLE_VALUE || error < ERROR_LOWER_ACCEPTABLE_VALUE)
             && (elbowEncoder.get() <= 0))
         {
-            //Force error to be within -.1 and .1
-            error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO) ;
+            //Force error to be within -.1 and .1 (or whatever value designated by MAX_ELBOW_SPEED_AUTO)
+            error = Math.max(Math.min(error, MAX_ELBOW_SPEED_AUTO), -MAX_ELBOW_SPEED_AUTO);
             
             if(error > 0 && !elbowLowerLimitSwitch.get())
             {
