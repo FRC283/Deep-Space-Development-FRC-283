@@ -1,34 +1,27 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class LiftSubsystem
 {
+    private static final double LIFT_MOTOR_SPEED_MAGNITUDE = .25;
+
     boolean liftUnlocked = false;
+    TalonSRX frontLeft;
+    TalonSRX frontRight;
+    VictorSPX backLeft;
+    VictorSPX backRight;
     
-    /**Solenoid controlling the left front climber piston*/
-    Solenoid leftFront;
-    /**Solenoid controlling the right front climber piston*/
-    Solenoid rightFront;
-    /**Solenoid controlling the left back climber piston*/
-    Solenoid leftBack;
-    /**Solenoid controlling the right back climber piston*/
-    Solenoid rightBack;
-    /**Solenoid array controlling all climber pistons */
-    Solenoid[] lift;
-    /**Solenoid array controlling front climber pistons */
-    Solenoid[] frontLift;
-    /**Solenoid array controlling back climber pistons */
-    Solenoid[] backLift;
-    /**Is the front left piston active? */
-    boolean flActive = false;
-    /**Is the front right piston active? */
-    boolean frActive = false;
-    /**Is the back left piston active? */
-    boolean blActive = false;
-    /**Is the back right piston active? */
-    boolean brActive = false;
+    DigitalInput frontLeftLimitSwitch;
+    DigitalInput frontRightLimitSwitch;
+    AnalogInput backLeftLimitSwitch;
+    DigitalInput backRightLimitSwitch;
 
     LiftSubsystem()
     {
@@ -41,6 +34,16 @@ public class LiftSubsystem
         frontLift = new Solenoid[] {leftFront, rightFront};
         backLift = new Solenoid[] {leftBack, rightBack};
         */
+
+        frontLeft = new TalonSRX(Constants.FRONT_LEFT_LIFT_PORT);
+        frontRight = new TalonSRX(Constants.FRONT_RIGHT_LIFT_PORT);
+        backLeft = new VictorSPX(Constants.BACK_LEFT_LIFT_PORT);
+        backRight = new VictorSPX(Constants.BACK_RIGHT_LIFT_PORT);
+
+        frontLeftLimitSwitch = new DigitalInput(Constants.LIFT_FRONT_LEFT_LIMIT_SWITCH);
+        frontRightLimitSwitch = new DigitalInput(Constants.LIFT_FRONT_RIGHT_LIMIT_SWITCH);
+        backLeftLimitSwitch = new AnalogInput(Constants.LIFT_BACK_LEFT_LIMIT_SWITCH);
+        backRightLimitSwitch = new DigitalInput(Constants.LIFT_BACK_RIGHT_LIMIT_SWITCH);
     }
 
     /**
@@ -49,32 +52,83 @@ public class LiftSubsystem
      * @param retractFront - Bool to retract front pistons
      * @param retractBack - Bool to retract back pistons
      */
-    public void liftPistons(boolean extendAll, boolean retractFront, boolean retractBack)
+    public void actuateLift(boolean extendAll, boolean retractFront, boolean retractBack)
     {
+        //unlockLift() must be called before the lift can be actuated
         if(liftUnlocked)
         {
             if(extendAll)
             {
-                for(Solenoid s : lift)
+                if(!retractFront)
                 {
-                    s.set(true);
+                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + .1);
+                    frontRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) - .2);
+                }
+                
+                if(!retractBack)
+                {
+                    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                    backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
+                }    
+            }
+
+            if(retractFront)
+            {
+                if(frontRightLimitSwitch.get())
+                {
+                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + .2);
+                }
+                else
+                {
+                    frontRight.set(ControlMode.PercentOutput, 0);
+                }
+
+                if(frontLeftLimitSwitch.get())
+                {
+                    frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE - .1);
+                }
+                else
+                {
+                    frontLeft.set(ControlMode.PercentOutput, 0);
                 }
             }
-            else if(retractFront)
+            
+
+            if(retractBack)
             {
-                for(Solenoid s : frontLift)
+                if(backRightLimitSwitch.get())
                 {
-                    s.set(false);
+                    backRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                }
+                else
+                {
+                    backRight.set(ControlMode.PercentOutput, 0);
+                }
+
+                if(backLeftLimitSwitch.getVoltage() < .5)
+                {
+                    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
+                }
+                else
+                {
+                    backLeft.set(ControlMode.PercentOutput, 0);
                 }
             }
-            else if(retractBack)
+
+            if(!extendAll && !retractFront)
             {
-                for(Solenoid s : backLift)
-                {
-                    s.set(false);
-                }
-            }        
+                frontLeft.set(ControlMode.PercentOutput, 0);
+                frontRight.set(ControlMode.PercentOutput, 0);
+            }
+
+
+            if(!extendAll && !retractBack)
+            {
+                backLeft.set(ControlMode.PercentOutput, 0);
+                backRight.set(ControlMode.PercentOutput, 0);
+            }
         }
+        
     }
 
     /**
@@ -90,14 +144,10 @@ public class LiftSubsystem
     /**Sets SmartDashboard values for LiftSubsystem periodically*/
     public void periodic()
     {
-        flActive = leftFront.get();
-        frActive = rightFront.get();
-        blActive = leftBack.get();
-        brActive = rightBack.get();
-
-        SmartDashboard.putBoolean("flActive", flActive);
-        SmartDashboard.putBoolean("frActive", frActive);
-        SmartDashboard.putBoolean("blActive", blActive);
-        SmartDashboard.putBoolean("brActive", brActive);
+        SmartDashboard.putBoolean("Lift Unlocked", liftUnlocked);
+        SmartDashboard.putBoolean("Front Left Limit Switch", frontLeftLimitSwitch.get());
+        SmartDashboard.putBoolean("Front Right Limit Switch", frontRightLimitSwitch.get());
+        SmartDashboard.putNumber("Back Left Limit Switch", backLeftLimitSwitch.getVoltage());
+        SmartDashboard.putBoolean("Back Right Limit Switch", backRightLimitSwitch.get());
     }
 }

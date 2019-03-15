@@ -144,11 +144,11 @@ public class IntakeSubsystem
      * @param dirTog - direction that the intake wheels is moving in, toggle between inwards(default) and outwards
      * @param runTog - if the wheels are running, toggle between on and off(default)
      */
-    public void intake(boolean intakeIn,boolean intakeOut) 
+    public void intake(boolean rollInwards,boolean rollOutwards) 
     {
-        if(intakeIn)
-            intakeRollers.set(ROLLER_SPEED_MAGNITUDE * -1);
-        if(intakeOut)
+        if(rollInwards)
+            intakeRollers.set(ROLLER_SPEED_MAGNITUDE*-1);
+        else if (rollOutwards)
             intakeRollers.set(ROLLER_SPEED_MAGNITUDE);
         else
             intakeRollers.set(0);
