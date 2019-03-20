@@ -57,9 +57,16 @@ public class Constants
 			public static final int INTAKE_UPPER_LIMIT_SWITCH = 4;
 			public static final int ELBOW_UPPER_LIMIT_SWITCH = 8;
 			public static final int ELBOW_LOWER_LIMIT_SWITCH = 9;
-			public static final int LIFT_FRONT_LEFT_LIMIT_SWITCH = 6;
-			public static final int LIFT_FRONT_RIGHT_LIMIT_SWITCH = 5;
-			public static final int LIFT_BACK_RIGHT_LIMIT_SWITCH = 7;
+			//limit switches
+				public static final int LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH = 6;
+				public static final int LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH = 5;
+				public static final int LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH = 7;
+
+				public static final int LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH = 8;
+				public static final int LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH = 9;
+				public static final int LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH = 10;
+				public static final int LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH = 11;
+
 			public static final int FRONT_LEFT_ENCODER_PORT_A = 10;
 			public static final int FRONT_LEFT_ENCODER_PORT_B = 11;
 			public static final int FRONT_RIGHT_ENCODER_PORT_A = 12;
@@ -78,7 +85,8 @@ public class Constants
 			//public static final int LEFT_INTAKE_ACTUATION_ENCODER_PORT_B = 7;
 			//public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_A = 4;
 			//public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_B = 9;
-			public static final int LIFT_BACK_LEFT_LIMIT_SWITCH = 1;
+
+			public static final int LIFT_TOP_BACK_LEFT_LIMIT_SWITCH = 1;
 		//Pneumatics
 			public static final int GRIPPER_PORT = 2;
 			public static final int CARGO_KICKER_PORT = 1;
