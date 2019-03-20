@@ -1,20 +1,30 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class LiftSubsystem
 {
     private static final double LIFT_MOTOR_SPEED_MAGNITUDE = .25;
+    private static final double P_CONST = .1;
+    private static final double P_UPDATE = .1;
+    private static final int liftErr = 10;
+    private static int avg = 0;
+    private static final int lvl2plat = 0;
+    private static final int lvl3plat = 0;
+    private static boolean isLifting = false;
+    private static int target = 0;
+    
 
     boolean liftUnlocked = false;
-    TalonSRX frontLeft;
-    TalonSRX frontRight;
+    VictorSPX frontLeft;
+    VictorSPX frontRight;
     VictorSPX backLeft;
     VictorSPX backRight;
     
@@ -22,7 +32,10 @@ public class LiftSubsystem
     DigitalInput frontRightLimitSwitch;
     AnalogInput backLeftLimitSwitch;
     DigitalInput backRightLimitSwitch;
-
+    Encoder frontLeftLiftEnc;
+    Encoder frontRightLiftEnc;
+    Encoder backLeftLiftEnc;
+    Encoder backRightLiftEnc;
     LiftSubsystem()
     {
         /*leftFront = new Solenoid(Constants.FRONT_LEFT_LIFT_PORT);
@@ -35,8 +48,8 @@ public class LiftSubsystem
         backLift = new Solenoid[] {leftBack, rightBack};
         */
 
-        frontLeft = new TalonSRX(Constants.FRONT_LEFT_LIFT_PORT);
-        frontRight = new TalonSRX(Constants.FRONT_RIGHT_LIFT_PORT);
+        frontLeft = new VictorSPX(Constants.FRONT_LEFT_LIFT_PORT);
+        frontRight = new VictorSPX(Constants.FRONT_RIGHT_LIFT_PORT);
         backLeft = new VictorSPX(Constants.BACK_LEFT_LIFT_PORT);
         backRight = new VictorSPX(Constants.BACK_RIGHT_LIFT_PORT);
 
@@ -44,6 +57,13 @@ public class LiftSubsystem
         frontRightLimitSwitch = new DigitalInput(Constants.LIFT_FRONT_RIGHT_LIMIT_SWITCH);
         backLeftLimitSwitch = new AnalogInput(Constants.LIFT_BACK_LEFT_LIMIT_SWITCH);
         backRightLimitSwitch = new DigitalInput(Constants.LIFT_BACK_RIGHT_LIMIT_SWITCH);
+        frontLeftLiftEnc = new Encoder(Constants.FRONT_LEFT_ENCODER_PORT_A,Constants.FRONT_LEFT_ENCODER_PORT_B);
+        frontRightLiftEnc = new Encoder(Constants.FRONT_RIGHT_ENCODER_PORT_A,Constants.FRONT_RIGHT_ENCODER_PORT_B);
+        backLeftLiftEnc = new Encoder(Constants.BACK_LEFT_ENCODER_PORT_A,Constants.BACK_LEFT_ENCODER_PORT_B);
+        backRightLiftEnc = new Encoder(Constants.BACK_RIGHT_ENCODER_PORT_A,Constants.BACK_RIGHT_ENCODER_PORT_B);
+
+
+
     }
 
     /**
@@ -149,5 +169,35 @@ public class LiftSubsystem
         SmartDashboard.putBoolean("Front Right Limit Switch", frontRightLimitSwitch.get());
         SmartDashboard.putNumber("Back Left Limit Switch", backLeftLimitSwitch.getVoltage());
         SmartDashboard.putBoolean("Back Right Limit Switch", backRightLimitSwitch.get());
+        liftPerodic();
+    }
+    public void liftPerodic()
+    {
+        avg = (frontLeftLiftEnc.get() + 
+                frontRightLiftEnc.get() +
+                backLeftLiftEnc.get() +
+                backRightLiftEnc.get()) / 4;
+        if(isLifting)
+        {
+            if(backLeftLimitSwitch.getValue() > 0 || (backLeftLiftEnc.get() <= target - liftErr) || (backLeftLiftEnc.get() >= target + liftErr))
+            {
+                backLeft.set(ControlMode.PercentOutput, 0);
+            }
+            else
+            {
+                if(backLeftLiftEnc.get() > (avg + liftErr))
+                {
+                    backLeft.set(ControlMode.PercentOutput,LIFT_MOTOR_SPEED_MAGNITUDE-P_UPDATE);
+                }
+                else if(backLeftLiftEnc.get() < (avg - liftErr))
+                {
+                    backLeft.set(ControlMode.PercentOutput,LIFT_MOTOR_SPEED_MAGNITUDE+P_UPDATE);
+                }
+                else
+                {
+                    backLeft.set(ControlMode.PercentOutput,LIFT_MOTOR_SPEED_MAGNITUDE);
+                }
+            }
+        }
     }
 }
