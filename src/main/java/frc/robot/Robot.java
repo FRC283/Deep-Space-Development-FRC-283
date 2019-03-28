@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
 
   DriveSubsystem drive;
   ArmSubsystem arm;
-  IntakeSubsystem intake;
+  //IntakeSubsystem intake;
   LiftSubsystem lift;
   Utilities283 utils;
   Joystick logitech, xbox;
@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
 
     drive = new DriveSubsystem();
     arm = new ArmSubsystem();
-    intake = new IntakeSubsystem();
+    //intake = new IntakeSubsystem();
     lift = new LiftSubsystem();
     logitech = new Joystick(Constants.LOGITECH_PORT);
     xbox = new Joystick(Constants.XBOX_PORT);
@@ -99,14 +99,14 @@ public class Robot extends TimedRobot {
 
   public void periodic()
   {
-    //arm.periodic();
+    arm.periodic();
     //drive.periodic();
-    intake.periodic();
+    //intake.periodic();
     lift.periodic();
 
-    /*drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
+    drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
                 logitech.getRawAxis(Constants.LEFT_X), 
-                logitech.getRawAxis(Constants.RIGHT_X));*/
+                logitech.getRawAxis(Constants.RIGHT_X));
     
     //arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
     
@@ -120,18 +120,18 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
     //SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get()); 
              
-    /*arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
+    arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
                      xbox.getRawButton(Constants.LEFT_BUMPER),
-                     xbox.getRawButton(Constants.RIGHT_BUMPER));*/
+                     xbox.getRawButton(Constants.RIGHT_BUMPER));//*/
     
-    intake.intake(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER));
+    /*intake.intake(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER));
     intake.rotate((logitech.getRawAxis(Constants.LEFT_TRIGGER) >= 0.5), 
                   (logitech.getRawAxis(Constants.RIGHT_TRIGGER) >= 0.5),
                    logitech.getRawButton(Constants.BACK));
     //               */
 
     lift.unlockLift(xbox.getRawButton(Constants.BACK));
-    lift.actuateLift(xbox.getRawButton(Constants.A),
+    lift.actuateLift(logitech.getRawButton(Constants.A),
                      logitech.getRawButton(Constants.Y),
                      logitech.getRawButton(Constants.B));
   

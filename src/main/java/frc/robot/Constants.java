@@ -33,14 +33,13 @@ public class Constants
 
 
 			//VictorSPX
-			public static final int FRONT_LEFT_LIFT_PORT = 6;
-			public static final int FRONT_RIGHT_LIFT_PORT = 7;
-			//TalonSRX
-			public static final int BACK_LEFT_LIFT_PORT = 4;
-			public static final int BACK_RIGHT_LIFT_PORT = 5;
+			public static final int FRONT_LEFT_LIFT_PORT = 4;
+			public static final int FRONT_RIGHT_LIFT_PORT = 5;
+			public static final int BACK_LEFT_LIFT_PORT = 6;
+			public static final int BACK_RIGHT_LIFT_PORT = 7;
 
 		//PWM
-			public static final int ELBOW_MOTOR_PORT = 1; 					//SOLID BLUE
+			public static final int ELBOW_MOTOR_PORT = 1; 						//SOLID BLUE
 			public static final int LEFT_WRIST_MOTOR_PORT = 0;				//SOLID YELLOW
 			public static final int RIGHT_WRIST_MOTOR_PORT = 5;				//SOLID GREEN
 			public static final int LEFT_INTAKE_ACTUATION_MOTOR_PORT = 2;	//SOLID ORANGE
@@ -61,20 +60,21 @@ public class Constants
 				public static final int LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH = 6;
 				public static final int LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH = 5;
 				public static final int LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH = 7;
+				public static final int LIFT_TOP_BACK_LEFT_LIMIT_SWITCH = 12;
 
-				public static final int LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH = 8;
-				public static final int LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH = 9;
+				public static final int LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH = 13;
+				public static final int LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH = 14;
 				public static final int LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH = 10;
-				public static final int LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH = 11;
+				public static final int LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH = 11;//*/
 
-			public static final int FRONT_LEFT_ENCODER_PORT_A = 10;
-			public static final int FRONT_LEFT_ENCODER_PORT_B = 11;
+			/*public static final int FRONT_LEFT_ENCODER_PORT_A = 18;
+			public static final int FRONT_LEFT_ENCODER_PORT_B = 19;
 			public static final int FRONT_RIGHT_ENCODER_PORT_A = 12;
 			public static final int FRONT_RIGHT_ENCODER_PORT_B = 13;
 			public static final int BACK_LEFT_ENCODER_PORT_A = 14;
 			public static final int BACK_LEFT_ENCODER_PORT_B = 15;
 			public static final int BACK_RIGHT_ENCODER_PORT_A = 16;
-			public static final int BACK_RIGHT_ENCODER_PORT_B = 17;
+			public static final int BACK_RIGHT_ENCODER_PORT_B = 17;//*/
 			
 		//Analog
 			public static final int LEFT_WRIST_ENCODER_PORT_A = 0;
@@ -86,7 +86,6 @@ public class Constants
 			//public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_A = 4;
 			//public static final int RIGHT_INTAKE_ACTUATION_ENCODER_PORT_B = 9;
 
-			public static final int LIFT_TOP_BACK_LEFT_LIMIT_SWITCH = 1;
 		//Pneumatics
 			public static final int GRIPPER_PORT = 2;
 			public static final int CARGO_KICKER_PORT = 1;

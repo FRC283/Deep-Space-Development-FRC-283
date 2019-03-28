@@ -4,11 +4,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem
 {
-    TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;   
+    TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive; 
+    
+    Spark frontLeftController;
+	Spark frontRightController;
+	Spark backLeftController;
+	Spark backRightController;
 
     Utilities283 utils;
     DriveSubsystem()
@@ -17,6 +23,12 @@ public class DriveSubsystem
         backLeftDrive = new TalonSRX(Constants.BACK_LEFT_DRIVE_PORT);
         frontRightDrive = new TalonSRX(Constants.FRONT_RIGHT_DRIVE_PORT);
         backRightDrive = new TalonSRX(Constants.BACK_RIGHT_DRIVE_PORT);
+
+        frontLeftController = new Spark(3);
+		frontRightController = new Spark(4);
+		backLeftController = new Spark(8);
+		backRightController = new Spark(9);
+
         frontLeftDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         backLeftDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         frontRightDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -33,10 +45,15 @@ public class DriveSubsystem
      */
     public void drive(double lYMag, double lXMag, double rXMag)
     {
-        frontLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag - lYMag + lXMag) * 1));		
-        frontRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag - lYMag - lXMag) * -1));
-		backLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag + lYMag + lXMag) * -1));
-		backRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag + lYMag - lXMag) * 1));	
+        //frontLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag - lYMag + lXMag) * 1));		
+        //frontRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag - lYMag - lXMag) * -1));
+		//backLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag + lYMag + lXMag) * -1));
+        //backRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag + lYMag - lXMag) * 1));
+        
+        frontLeftController.set((rXMag - lYMag + lXMag) * -1);
+        frontRightController.set((-rXMag - lYMag - lXMag) * 1);
+        backLeftController.set((-rXMag + lYMag + lXMag) * 2);
+        backRightController.set((rXMag + lYMag - lXMag) * -2);	
     }
 
     /**Sets SmartDashboard values for DriveSubsystem periodically */

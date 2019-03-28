@@ -23,7 +23,7 @@ public class ArmSubsystem
     DigitalInput elbowUpperLimitSwitch;
     DigitalInput elbowLowerLimitSwitch;
     Encoder elbowEncoder;
-    Servo cameraServo;
+    //Servo cameraServo;
     Boolean isPositioning = false;
     /**Current target of elbow*/
     static double target; 
@@ -76,7 +76,7 @@ public class ArmSubsystem
         cargoSol = new Solenoid(Constants.CARGO_KICKER_PORT);
         hatchSol = new Solenoid(Constants.HATCH_RELEASE_PORT);
 
-        cameraServo = new Servo(Constants.CAMERA_SERVO_PORT);
+        //cameraServo = new Servo(Constants.CAMERA_SERVO_PORT);
 
         //Timers for solenoids
         cargoKickerTimer = new Timer();
