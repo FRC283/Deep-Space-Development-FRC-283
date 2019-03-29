@@ -102,7 +102,7 @@ public class ArmSubsystem
         SmartDashboard.putNumber("error", target - pos);
         SmartDashboard.putNumber("P_Coefficient * error", P_COEFFICIENT * (target - pos));
         wristPeriodic();
-        rotatePeriodic();
+        //rotatePeriodic();
     }
 
     /**
@@ -186,13 +186,15 @@ public class ArmSubsystem
             //armMag is a value between 0 and 1, this makes the max target change +/- 10 
             target = target + (10 * armMag);
             
-            /*
+            
             armMag = armMag-Constants.DEAD_ZONE;
             armMag = Math.max(Math.min(armMag, MAX_ELBOW_SPEED_MANUAL), -MAX_ELBOW_SPEED_MANUAL);
             elbowMotor.set(armMag);
             isPositioning = false;
-            */
+            //*/
         }
+        else
+            elbowMotor.set(0);
 
         if(wristMag > Constants.DEAD_ZONE || wristMag < (-Constants.DEAD_ZONE))
         {

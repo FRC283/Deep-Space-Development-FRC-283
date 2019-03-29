@@ -35,8 +35,8 @@ public class Constants
 			//VictorSPX
 			public static final int FRONT_LEFT_LIFT_PORT = 4;
 			public static final int FRONT_RIGHT_LIFT_PORT = 5;
-			public static final int BACK_LEFT_LIFT_PORT = 6;
-			public static final int BACK_RIGHT_LIFT_PORT = 7;
+			public static final int BACK_LEFT_LIFT_PORT = 7;
+			public static final int BACK_RIGHT_LIFT_PORT = 6;
 
 		//PWM
 			public static final int ELBOW_MOTOR_PORT = 1; 						//SOLID BLUE
@@ -57,15 +57,15 @@ public class Constants
 			public static final int ELBOW_UPPER_LIMIT_SWITCH = 8;
 			public static final int ELBOW_LOWER_LIMIT_SWITCH = 9;
 			//limit switches
-				public static final int LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH = 6;
-				public static final int LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH = 5;
-				public static final int LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH = 7;
-				public static final int LIFT_TOP_BACK_LEFT_LIMIT_SWITCH = 12;
+				public static final int LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH = 10;
+				public static final int LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH = 11;
+				public static final int LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH = 12;
+				public static final int LIFT_TOP_BACK_LEFT_LIMIT_SWITCH = 13;
 
-				public static final int LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH = 13;
-				public static final int LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH = 14;
-				public static final int LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH = 10;
-				public static final int LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH = 11;//*/
+				public static final int LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH = 14;
+				public static final int LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH = 15;
+				public static final int LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH = 16;
+				public static final int LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH = 17;//*/
 
 			/*public static final int FRONT_LEFT_ENCODER_PORT_A = 18;
 			public static final int FRONT_LEFT_ENCODER_PORT_B = 19;

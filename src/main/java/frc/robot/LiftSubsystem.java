@@ -75,8 +75,8 @@ public class LiftSubsystem
         frontRight = new VictorSPX(Constants.FRONT_RIGHT_LIFT_PORT);
         frontLeft = new VictorSPX(Constants.FRONT_LEFT_LIFT_PORT);
 
-        //frontRight.setInverted(true);
-        //backLeft.setInverted(true);
+        backRight.setInverted(true);
+        backLeft.setInverted(true);
 
 
 
@@ -117,7 +117,7 @@ public class LiftSubsystem
                 if(!retractFront)
                 {
                     if(topFrontLeftLimitSwitch.get())
-                        frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE - 0.05);
+                        frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE - 0.2);
                     else
                         frontLeft.set(ControlMode.PercentOutput, 0);
 
@@ -135,18 +135,15 @@ public class LiftSubsystem
                         backLeft.set(ControlMode.PercentOutput, 0);
 
                     if(topBackRightLimitSwitch.get())
-                        backRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE));
+                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE));
                     else
                         backRight.set(ControlMode.PercentOutput, 0);
                 }    
             }
 
             if(retractFront)
-            {
-                frontRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                /*
-                if(topFrontRightLimitSwitch.get())
+            {   
+                if(bottomFrontRightLimitSwitch.get())
                 {
                     frontRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                 }
@@ -155,7 +152,7 @@ public class LiftSubsystem
                     frontRight.set(ControlMode.PercentOutput, 0);
                 }
 
-                if(topFrontLeftLimitSwitch.get())
+                if(bottomFrontLeftLimitSwitch.get())
                 {
                     frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
                 }
@@ -163,18 +160,15 @@ public class LiftSubsystem
                 {
                     frontLeft.set(ControlMode.PercentOutput, 0);
                 }
-                */
+                
             }
             
 
             if(retractBack)
             {
-                backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                /*
-                if(topBackRightLimitSwitch.get())
+                if(bottomBackRightLimitSwitch.get())
                 {
-                    backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
+                    backRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                 }
                 else
                 {
@@ -186,7 +180,7 @@ public class LiftSubsystem
                 //    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                 //}
 
-                if(topBackLeftLimitSwitch.get())
+                if(bottomBackLeftLimitSwitch.get())
                 {
                     backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                 }
@@ -194,7 +188,7 @@ public class LiftSubsystem
                 {
                     backLeft.set(ControlMode.PercentOutput, 0);
                 }
-                */
+                
             }
 
             if(!extendAll && !retractFront)
