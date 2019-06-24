@@ -42,7 +42,7 @@ public class ArmSubsystem
     private static final double LEFT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double RIGHT_WRIST_SPEED_MULTIPLIER = 0.25;
     private static final double MAX_ELBOW_SPEED_AUTO = .25;
-    private static final double MAX_ELBOW_SPEED_MANUAL = .25;
+    private static final double MAX_ELBOW_SPEED_MANUAL = .5;
     private static final int LOW_CARGO = -441;
     private static final int LOW_HATCH = -243;
     private static final int MID_CARGO = -805;

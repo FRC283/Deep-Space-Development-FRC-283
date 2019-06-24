@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+//import edu.wpi.first.wpilibj.pdp;
 public class Robot extends TimedRobot {
 
   /*DriveSubsystem drive;
@@ -19,6 +19,7 @@ public class Robot extends TimedRobot {
   LiftSubsystem lift;
   Utilities283 utils;
   Joystick logitech, xbox;
+  //PowerDistributionPanel pdp;
 
   /*
   Encoder elbowEnc;
@@ -131,7 +132,7 @@ public class Robot extends TimedRobot {
                    logitech.getRawButton(Constants.BACK));
     //               */
     
-    lift.unlockLift(xbox.getRawButton(Constants.BACK));
+    lift.unlockLift(xbox.getRawButton(Constants.BACK), drive);
     lift.actuateLift(logitech.getRawButton(Constants.A),
                      logitech.getRawButton(Constants.Y),
                      logitech.getRawButton(Constants.B));//*/

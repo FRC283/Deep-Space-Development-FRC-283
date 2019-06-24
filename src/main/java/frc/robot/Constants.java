@@ -69,12 +69,12 @@ public class Constants
 
 			/*public static final int FRONT_LEFT_ENCODER_PORT_A = 18;
 			public static final int FRONT_LEFT_ENCODER_PORT_B = 19;
-			public static final int FRONT_RIGHT_ENCODER_PORT_A = 12;
-			public static final int FRONT_RIGHT_ENCODER_PORT_B = 13;
-			public static final int BACK_LEFT_ENCODER_PORT_A = 14;
-			public static final int BACK_LEFT_ENCODER_PORT_B = 15;
-			public static final int BACK_RIGHT_ENCODER_PORT_A = 16;
-			public static final int BACK_RIGHT_ENCODER_PORT_B = 17;//*/
+			public static final int FRONT_RIGHT_ENCODER_PORT_A = 20;
+			public static final int FRONT_RIGHT_ENCODER_PORT_B = 21;
+			public static final int BACK_LEFT_ENCODER_PORT_A = 22;
+			public static final int BACK_LEFT_ENCODER_PORT_B = 23;
+			public static final int BACK_RIGHT_ENCODER_PORT_A = 24;
+			public static final int BACK_RIGHT_ENCODER_PORT_B = 25;//*/
 			
 		//Analog
 			public static final int LEFT_WRIST_ENCODER_PORT_A = 0;
@@ -92,5 +92,5 @@ public class Constants
 			public static final int HATCH_RELEASE_PORT = 0;
 
 	//Deadzone
-			public static final double DEAD_ZONE = 0.1;
+			public static final double DEAD_ZONE = 0.05;
 }

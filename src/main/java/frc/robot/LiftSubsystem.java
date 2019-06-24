@@ -122,7 +122,7 @@ public class LiftSubsystem
                         frontLeft.set(ControlMode.PercentOutput, 0);
 
                     if(topFrontRightLimitSwitch.get())
-                        frontRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.1));
+                        frontRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.15));
                     else
                         frontRight.set(ControlMode.PercentOutput, 0);
                 }
@@ -130,12 +130,12 @@ public class LiftSubsystem
                 if(!retractBack)
                 {
                     if(topBackLeftLimitSwitch.get())
-                        backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + 0.05);
+                        backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + 0.2);
                     else
                         backLeft.set(ControlMode.PercentOutput, 0);
 
                     if(topBackRightLimitSwitch.get())
-                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE));
+                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE)+.05);
                     else
                         backRight.set(ControlMode.PercentOutput, 0);
                 }    
@@ -180,6 +180,8 @@ public class LiftSubsystem
                 //    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
                 //}
 
+
+
                 if(bottomBackLeftLimitSwitch.get())
                 {
                     backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
@@ -211,23 +213,28 @@ public class LiftSubsystem
      * This unlocks the ability activate the lift pistons to accidental activation
      * @param activate - boolean toggled to true for first time the button is pressed; stays true until power cycle
      */
-    public void unlockLift(boolean activate)
+    public void unlockLift(boolean activate, DriveSubsystem drive)
     {
-        if(activate = true)
+        if(activate)
+        {
             liftUnlocked = true;
+            drive.setDriveCoefficient(.75);
+        }
+            
     }
 
     /**Sets SmartDashboard values for LiftSubsystem periodically*/
     public void periodic()
     {
         SmartDashboard.putBoolean("Lift Unlocked", liftUnlocked);
-        SmartDashboard.putBoolean("Front Left Limit Switch", topFrontLeftLimitSwitch.get());
-        SmartDashboard.putBoolean("Front Right Limit Switch", topFrontRightLimitSwitch.get());
-        
-        //SmartDashboard.putNumber("Back Left Limit Switch", topBackLeftLimitSwitch.getVoltage());
-        SmartDashboard.putBoolean("Back Left Limit Switch", topBackLeftLimitSwitch.get());
-        
-        SmartDashboard.putBoolean("Back Right Limit Switch", topBackRightLimitSwitch.get());
+        SmartDashboard.putBoolean("Top Front Left Limit Switch",    topFrontLeftLimitSwitch.get());
+        SmartDashboard.putBoolean("Top Front Right Limit Switch",   topFrontRightLimitSwitch.get());
+        SmartDashboard.putBoolean("Top Back Left Limit Switch",     topBackLeftLimitSwitch.get());
+        SmartDashboard.putBoolean("Top Back Right Limit Switch",    topBackRightLimitSwitch.get());
+        SmartDashboard.putBoolean("Bottom Front Left Limit Switch",    bottomFrontLeftLimitSwitch.get());
+        SmartDashboard.putBoolean("Bottom Front Right Limit Switch",   bottomFrontRightLimitSwitch.get());
+        SmartDashboard.putBoolean("Bottom Back Left Limit Switch",     bottomBackLeftLimitSwitch.get());
+        SmartDashboard.putBoolean("Bottom Back Right Limit Switch",    bottomBackRightLimitSwitch.get());
         //liftPerodic();
     }
     /*public void liftPerodic()
