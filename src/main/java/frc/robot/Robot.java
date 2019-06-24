@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
 
-  DriveSubsystem drive;
+  /*DriveSubsystem drive;
   ArmSubsystem arm;
   IntakeSubsystem intake;
   LiftSubsystem lift;
@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
     rotateEncoder = new Encoder(Constants.INTAKE_ROTATION_ENCODER_PORT_A, Constants.INTAKE_ROTATION_ENCODER_PORT_B);
     intakeUpperLimitSwitch = new DigitalInput(Constants.INTAKE_UPPER_LIMIT_SWITCH);
     */
+    
   }
 
   /**   */
@@ -99,7 +100,7 @@ public class Robot extends TimedRobot {
 
   public void periodic()
   {
-    arm.periodic();
+    /*arm.periodic();
     drive.periodic();
     intake.periodic();
     lift.periodic();
