@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 //import edu.wpi.first.wpilibj.pdp;
 public class Robot extends TimedRobot {
 
-  /*DriveSubsystem drive;
+  DriveSubsystem drive;
   ArmSubsystem arm;
   IntakeSubsystem intake;
   LiftSubsystem lift;

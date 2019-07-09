@@ -3,24 +3,13 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.VictorSP;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class LiftSubsystem
 {
     private static final double LIFT_MOTOR_SPEED_MAGNITUDE = .75;
-    private static final double P_CONST = .1;
-    private static final double P_UPDATE = .1;
-    private static final int liftErr = 10;
-    private static int avg = 0;
-    private static final int lvl2plat = 0;
-    private static final int lvl3plat = 0;
-    private static boolean isLifting = false;
-    private static int target = 0;
     /*
         | Motor     |Signal | Direction
           FrontLeft |   -   | Down
@@ -36,18 +25,14 @@ public class LiftSubsystem
     VictorSPX backLeft;
     VictorSPX backRight;
     
-    DigitalInput topFrontLeftLimitSwitch;
-    DigitalInput topFrontRightLimitSwitch;
-
-    //AnalogInput  topBackLeftLimitSwitch;
-    DigitalInput  topBackLeftLimitSwitch;
-
-    DigitalInput topBackRightLimitSwitch;
-    
-    DigitalInput bottomFrontLeftLimitSwitch;
-    DigitalInput bottomFrontRightLimitSwitch;
-    DigitalInput bottomBackLeftLimitSwitch;
-    DigitalInput bottomBackRightLimitSwitch;
+    DirLimit topFrontLeftLimit;
+    DirLimit topFrontRightLimit;
+    DirLimit  topBackLeftLimit;
+    DirLimit topBackRightLimit;
+    DirLimit bottomFrontLeftLimit;
+    DirLimit bottomFrontRightLimit;
+    DirLimit bottomBackLeftLimit;
+    DirLimit bottomBackRightLimit;
 
     /*Encoder fL_LiftEnc;
     Encoder fR_LiftEnc;
@@ -80,25 +65,21 @@ public class LiftSubsystem
 
 
 
-        topFrontLeftLimitSwitch = new DigitalInput(Constants.LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH);
-        topFrontRightLimitSwitch = new DigitalInput(Constants.LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH);
-        //topBackLeftLimitSwitch = new AnalogInput(Constants.LIFT_TOP_BACK_LEFT_LIMIT_SWITCH);
-        topBackLeftLimitSwitch = new DigitalInput(Constants.LIFT_TOP_BACK_LEFT_LIMIT_SWITCH);
-        topBackRightLimitSwitch = new DigitalInput(Constants.LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH);
+        topFrontLeftLimit     = new DirLimit(-1, Constants.LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH, true);
+        topFrontRightLimit    = new DirLimit(1, Constants.LIFT_TOP_FRONT_RIGHT_LIMIT_SWITCH, true);
+        topBackLeftLimit      = new DirLimit(1, Constants.LIFT_TOP_BACK_LEFT_LIMIT_SWITCH, true);
+        topBackRightLimit     = new DirLimit(1, Constants.LIFT_TOP_BACK_RIGHT_LIMIT_SWITCH, true);
 
-        bottomFrontLeftLimitSwitch = new DigitalInput(Constants.LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH);
-        bottomFrontRightLimitSwitch = new DigitalInput(Constants.LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH);
-        bottomBackLeftLimitSwitch = new DigitalInput(Constants.LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH);
-        bottomBackRightLimitSwitch = new DigitalInput(Constants.LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH);
+        bottomFrontLeftLimit  = new DirLimit(1, Constants.LIFT_BOTTOM_FRONT_LEFT_LIMIT_SWITCH, true);
+        bottomFrontRightLimit = new DirLimit(-1, Constants.LIFT_BOTTOM_FRONT_RIGHT_LIMIT_SWITCH, true);
+        bottomBackLeftLimit   = new DirLimit(-1, Constants.LIFT_BOTTOM_BACK_LEFT_LIMIT_SWITCH, true);
+        bottomBackRightLimit  = new DirLimit(-1, Constants.LIFT_BOTTOM_BACK_RIGHT_LIMIT_SWITCH, true);
 
         /*fL_LiftEnc = new Encoder(Constants.FRONT_LEFT_ENCODER_PORT_A,Constants.FRONT_LEFT_ENCODER_PORT_B);
         fR_LiftEnc = new Encoder(Constants.FRONT_RIGHT_ENCODER_PORT_A,Constants.FRONT_RIGHT_ENCODER_PORT_B);
         bL_LiftEnc = new Encoder(Constants.BACK_LEFT_ENCODER_PORT_A,Constants.BACK_LEFT_ENCODER_PORT_B);
         bR_LiftEnc = new Encoder(Constants.BACK_RIGHT_ENCODER_PORT_A,Constants.BACK_RIGHT_ENCODER_PORT_B);//*/
 
-        Object[][] liftArr = {{frontLeft,  frontRight, backLeft,   backRight},
-                              /*{fL_LiftEnc, fR_LiftEnc, bL_LiftEnc, bR_LiftEnc},*/
-                              {topFrontLeftLimitSwitch, topFrontRightLimitSwitch, topBackLeftLimitSwitch, topBackRightLimitSwitch}};
     }
 
     /**
@@ -116,81 +97,30 @@ public class LiftSubsystem
             {
                 if(!retractFront)
                 {
-                    if(topFrontLeftLimitSwitch.get())
-                        frontLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE - 0.2);
-                    else
-                        frontLeft.set(ControlMode.PercentOutput, 0);
-
-                    if(topFrontRightLimitSwitch.get())
-                        frontRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.15));
-                    else
-                        frontRight.set(ControlMode.PercentOutput, 0);
+                        frontLeft.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE - 0.2) * topFrontLeftLimit.check(-LIFT_MOTOR_SPEED_MAGNITUDE));
+                        frontRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.15) * topFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
                 }
                 
                 if(!retractBack)
                 {
-                    if(topBackLeftLimitSwitch.get())
-                        backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE + 0.2);
-                    else
-                        backLeft.set(ControlMode.PercentOutput, 0);
-
-                    if(topBackRightLimitSwitch.get())
-                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE)+.05);
-                    else
-                        backRight.set(ControlMode.PercentOutput, 0);
+                        backLeft.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.2) * topBackLeftLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
+                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE+.05) * topBackRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
                 }    
             }
 
             if(retractFront)
             {   
-                if(bottomFrontRightLimitSwitch.get())
-                {
-                    frontRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                else
-                {
-                    frontRight.set(ControlMode.PercentOutput, 0);
-                }
 
-                if(bottomFrontLeftLimitSwitch.get())
-                {
-                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                else
-                {
-                    frontLeft.set(ControlMode.PercentOutput, 0);
-                }
-                
+                    frontRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE);
+
+                    frontLeft.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontLeftLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE);
             }
             
 
             if(retractBack)
             {
-                if(bottomBackRightLimitSwitch.get())
-                {
-                    backRight.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                else
-                {
-                    backRight.set(ControlMode.PercentOutput, 0);
-                }
-
-                //if(topBackLeftLimitSwitch.getVoltage() < .5)
-                //{
-                //    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                //}
-
-
-
-                if(bottomBackLeftLimitSwitch.get())
-                {
-                    backLeft.set(ControlMode.PercentOutput, -LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                else
-                {
-                    backLeft.set(ControlMode.PercentOutput, 0);
-                }
-                
+                    backRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
+                    backLeft.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
             }
 
             if(!extendAll && !retractFront)
