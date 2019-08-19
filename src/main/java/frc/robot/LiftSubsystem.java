@@ -3,7 +3,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Scheme.Schema;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -88,6 +88,7 @@ public class LiftSubsystem
      * @param retractFront - Bool to retract front pistons
      * @param retractBack - Bool to retract back pistons
      */
+    @Schema(value = Utilities283.LOGITECH_RIGHT_BUMPER)
     public void actuateLift(boolean extendAll, boolean retractFront, boolean retractBack)
     {
         //unlockLift() must be called before the lift can be actuated
@@ -97,30 +98,29 @@ public class LiftSubsystem
             {
                 if(!retractFront)
                 {
-                        frontLeft.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE - 0.2) * topFrontLeftLimit.check(-LIFT_MOTOR_SPEED_MAGNITUDE));
-                        frontRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.15) * topFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
+                        frontLeft.set(ControlMode.PercentOutput, topFrontLeftLimit.filter(-LIFT_MOTOR_SPEED_MAGNITUDE - 0.2));
+                        frontRight.set(ControlMode.PercentOutput, topFrontRightLimit.filter(LIFT_MOTOR_SPEED_MAGNITUDE + 0.15));
                 }
                 
                 if(!retractBack)
                 {
-                        backLeft.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE + 0.2) * topBackLeftLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
-                        backRight.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE+.05) * topBackRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
+                        backLeft.set(ControlMode.PercentOutput, topBackLeftLimit.filter(LIFT_MOTOR_SPEED_MAGNITUDE + 0.2));
+                        backRight.set(ControlMode.PercentOutput, topBackRightLimit.filter(LIFT_MOTOR_SPEED_MAGNITUDE+.05));
                 }    
             }
 
             if(retractFront)
             {   
 
-                    frontRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE);
-
-                    frontLeft.set(ControlMode.PercentOutput, (LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontLeftLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE);
+                    frontRight.set(ControlMode.PercentOutput, bottomFrontRightLimit.filter(-LIFT_MOTOR_SPEED_MAGNITUDE));
+                    frontLeft.set(ControlMode.PercentOutput, bottomFrontLeftLimit.filter(LIFT_MOTOR_SPEED_MAGNITUDE));
             }
             
 
             if(retractBack)
             {
-                    backRight.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
-                    backLeft.set(ControlMode.PercentOutput, (-LIFT_MOTOR_SPEED_MAGNITUDE) * bottomFrontRightLimit.check(LIFT_MOTOR_SPEED_MAGNITUDE));
+                    backRight.set(ControlMode.PercentOutput, bottomBackRightLimit.filter(-LIFT_MOTOR_SPEED_MAGNITUDE));
+                    backLeft.set(ControlMode.PercentOutput, bottomBackLeftLimit.filter(-LIFT_MOTOR_SPEED_MAGNITUDE));
             }
 
             if(!extendAll && !retractFront)
@@ -157,14 +157,14 @@ public class LiftSubsystem
     public void periodic()
     {
         SmartDashboard.putBoolean("Lift Unlocked", liftUnlocked);
-        SmartDashboard.putBoolean("Top Front Left Limit Switch",    topFrontLeftLimitSwitch.get());
-        SmartDashboard.putBoolean("Top Front Right Limit Switch",   topFrontRightLimitSwitch.get());
-        SmartDashboard.putBoolean("Top Back Left Limit Switch",     topBackLeftLimitSwitch.get());
-        SmartDashboard.putBoolean("Top Back Right Limit Switch",    topBackRightLimitSwitch.get());
-        SmartDashboard.putBoolean("Bottom Front Left Limit Switch",    bottomFrontLeftLimitSwitch.get());
-        SmartDashboard.putBoolean("Bottom Front Right Limit Switch",   bottomFrontRightLimitSwitch.get());
-        SmartDashboard.putBoolean("Bottom Back Left Limit Switch",     bottomBackLeftLimitSwitch.get());
-        SmartDashboard.putBoolean("Bottom Back Right Limit Switch",    bottomBackRightLimitSwitch.get());
+        SmartDashboard.putBoolean("Top Front Left Limit Switch",    topFrontLeftLimit.get());
+        SmartDashboard.putBoolean("Top Front Right Limit Switch",   topFrontRightLimit.get());
+        SmartDashboard.putBoolean("Top Back Left Limit Switch",     topBackLeftLimit.get());
+        SmartDashboard.putBoolean("Top Back Right Limit Switch",    topBackRightLimit.get());
+        SmartDashboard.putBoolean("Bottom Front Left Limit Switch",    bottomFrontLeftLimit.get());
+        SmartDashboard.putBoolean("Bottom Front Right Limit Switch",   bottomFrontRightLimit.get());
+        SmartDashboard.putBoolean("Bottom Back Left Limit Switch",     bottomBackLeftLimit.get());
+        SmartDashboard.putBoolean("Bottom Back Right Limit Switch",    bottomBackRightLimit.get());
         //liftPerodic();
     }
     /*public void liftPerodic()

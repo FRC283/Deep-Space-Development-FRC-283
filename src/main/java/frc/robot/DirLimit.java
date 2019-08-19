@@ -6,32 +6,58 @@ public class DirLimit
 {
     /**Direction of non movement */
     private int direction;
+
     /**Limit switch port */
     private DigitalInput limitSwitch;
+
     /**State when limit is not hit */
     private boolean normalClose;
+
     /**
      * Directional Limit Switch
      * @param dir - Direction of non movement
-     * @param swit - Limit switch port
-     * @param normal - State when limit is not hit
+     * @param switchPort - Limit switch port
+     * @param normalClose - State when limit is not hit
      */
-    DirLimit(int dir, int swit, boolean normal)
+    DirLimit(int dir, int switchPort, boolean normalClose)
     {
         direction = dir;
-        limitSwitch = new DigitalInput(swit);
-        normalClose = normal;
+        limitSwitch = new DigitalInput(switchPort);
+        this.normalClose = normalClose;
     }
+
     /**
      * 
-     * @param mag - direction that is going
-     * @return - go (1) or no go (0)
+     * @param axisMag - direction that is going
+     * @return - go (true) stop (false)
      */
-    public int check(double mag)
+    public boolean check(double axisMag)
     {
-        if((mag/direction > 0 ) && (normalClose != limitSwitch.get() ) )
-        //if the directions match and the switch is tripped, do not allow movement
-            return 0;
-        return 1;
+        if((axisMag * direction > 0 ) && (isPressed()))
+        {
+            //if the directions match and the switch is tripped, do not allow movement
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public double filter(double axisMag)
+    {
+        return axisMag * (check(axisMag) ? 1 : 0);
+    }
+
+    /**
+     * @return - Returns true if the inner switch
+     */
+    public boolean isPressed()
+    {
+        return normalClose != limitSwitch.get();
+    }
+    public boolean get()
+    {
+        return limitSwitch.get();
     }
 }
