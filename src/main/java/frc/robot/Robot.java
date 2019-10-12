@@ -10,24 +10,15 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.pdp;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Robot extends TimedRobot {
 
-  DriveSubsystem drive;
-  ArmSubsystem arm;
-  IntakeSubsystem intake;
-  LiftSubsystem lift;
-  Utilities283 utils;
-  Joystick logitech, xbox;
-  //PowerDistributionPanel pdp;
-
-  /*
-  Encoder elbowEnc;
-  DigitalInput elbowUpperLimitSwitch;
-  DigitalInput elbowLowerLimitSwitch;
-  Encoder rotateEncoder;
-  DigitalInput intakeUpperLimitSwitch;
-  */
+  private DriveSubsystem drive;
+  private ArmSubsystem arm;
+  private IntakeSubsystem intake;
+  private LiftSubsystem lift;
+  private Joystick logitech, xbox;
 
 
   /**
@@ -45,29 +36,21 @@ public class Robot extends TimedRobot {
     xbox = new Joystick(Constants.XBOX_PORT);
     CameraServer.getInstance().startAutomaticCapture();
 
-    /*
-    elbowEnc = new Encoder(Constants.ELBOW_ENCODER_PORT_A, Constants.ELBOW_ENCODER_PORT_B);
-    elbowUpperLimitSwitch = new DigitalInput(Constants.ELBOW_UPPER_LIMIT_SWITCH);
-    elbowLowerLimitSwitch = new DigitalInput(Constants.ELBOW_LOWER_LIMIT_SWITCH);
-    rotateEncoder = new Encoder(Constants.INTAKE_ROTATION_ENCODER_PORT_A, Constants.INTAKE_ROTATION_ENCODER_PORT_B);
-    intakeUpperLimitSwitch = new DigitalInput(Constants.INTAKE_UPPER_LIMIT_SWITCH);
-    */
-    
-  }
-
-  /**   */
-  @Override
-  public void robotPeriodic() {
-  }
-
-  /**   */
-  @Override
-  public void autonomousInit() {
-    
   }
 
   /**
-   * This function is called periodically during autonomous.
+   *  autonomousInit() is called once during the start of the Autonomous period of play
+   */
+  @Override
+  public void autonomousInit()
+  {
+
+  }
+
+  /**
+   * autonomousPeriodic() is called every timed period during Autonomous. By default, this is 20 milliseconds
+   * @see <a href="https://wpilib.screenstepslive.com/s/currentCS/m/java/l/599697-choosing-a-base-class">WPILIB Screen Steps Live</a>
+   * under the TimedRobot section for more information about the time interval.
    */
   @Override
   public void autonomousPeriodic()
@@ -76,7 +59,9 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called periodically during operator control.
+   * teleopPeriodic() is called every timed period during Autonomous. By default, this is 20 milliseconds
+   * @see <a href="https://wpilib.screenstepslive.com/s/currentCS/m/java/l/599697-choosing-a-base-class">WPILIB Screen Steps Live</a>
+   * under the TimedRobot section for more information about the time interval.
    */
   @Override
   public void teleopPeriodic() 
@@ -84,58 +69,46 @@ public class Robot extends TimedRobot {
     periodic();
   }
 
-  
-  
   /**
-  
-  * This function is called periodically during test mode.
+   * periodic() is called in both the teleopPeriodic() and autonomousPeriodic() because of the unique game setup this
+   * year where operators were allowed to control the robot during the autonomous (sandstorm) period of the game
    */
-  @Override
-  public void testPeriodic() 
+  private void periodic()
   {
-    /*
-    */ 
-    //SmartDashboard.putNumber("Intake Rotation Encoder Val", rotateEncoder.get());
-    //SmartDashboard.putBoolean("Intake Rotation Limit Switch", intakeUpperLimitSwitch.get());
-  }
-
-  public void periodic()
-  {
-    /*arm.periodic();
+    arm.periodic();
     drive.periodic();
     intake.periodic();
     lift.periodic();
 
-    drive.drive(logitech.getRawAxis(Constants.LEFT_Y),  
-                logitech.getRawAxis(Constants.LEFT_X), 
+    drive.drive(logitech.getRawAxis(Constants.LEFT_Y),
+                logitech.getRawAxis(Constants.LEFT_X),
                 logitech.getRawAxis(Constants.RIGHT_X));
-    
-    arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
-    
-    //arm.rotate(xbox.getRawButton(Constants.BACK),
-    //           xbox.getRawButton(Constants.START), 
-    //           xbox.getRawButton(Constants.B),
-    //           xbox.getRawButton(Constants.A), 
-    //          xbox.getRawButton(Constants.X));
 
-    //SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEncoder.get());
-    //SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
-    //SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get()); 
-             
+    arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
+
+    arm.rotate(xbox.getRawButton(Constants.BACK),
+               xbox.getRawButton(Constants.START),
+               xbox.getRawButton(Constants.B),
+               xbox.getRawButton(Constants.A),
+              xbox.getRawButton(Constants.X));
+
+    SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEncoder.get());
+    SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
+    SmartDashboard.putBoolean("Elbow Lower Limit Switch", arm.elbowLowerLimitSwitch.get());
+
     arm.actuateWrist(xbox.getRawButtonPressed(Constants.Y),
                      xbox.getRawButton(Constants.LEFT_BUMPER),
-                     xbox.getRawButton(Constants.RIGHT_BUMPER));//*/
-    
+                     xbox.getRawButton(Constants.RIGHT_BUMPER));
+
     intake.intake(logitech.getRawButton(Constants.LEFT_BUMPER), logitech.getRawButton(Constants.RIGHT_BUMPER));
-    intake.rotate((logitech.getRawAxis(Constants.LEFT_TRIGGER) >= 0.5), 
+    intake.rotate((logitech.getRawAxis(Constants.LEFT_TRIGGER) >= 0.5),
                   (logitech.getRawAxis(Constants.RIGHT_TRIGGER) >= 0.5),
                    logitech.getRawButton(Constants.BACK));
-    //               */
-    
+
     lift.unlockLift(xbox.getRawButton(Constants.BACK), drive);
     lift.actuateLift(logitech.getRawButton(Constants.A),
                      logitech.getRawButton(Constants.Y),
-                     logitech.getRawButton(Constants.B));//*/
+                     logitech.getRawButton(Constants.B));
   
   }
 }

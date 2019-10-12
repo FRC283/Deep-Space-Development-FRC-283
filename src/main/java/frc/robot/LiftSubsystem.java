@@ -18,40 +18,26 @@ public class LiftSubsystem
           BackRight |   -   | Down
     */
 
-    boolean liftUnlocked = false;
+    private boolean liftUnlocked = false;
     
-    VictorSPX frontLeft;
-    VictorSPX frontRight;
-    VictorSPX backLeft;
-    VictorSPX backRight;
+    private VictorSPX frontLeft;
+    private VictorSPX frontRight;
+    private VictorSPX backLeft;
+    private VictorSPX backRight;
     
-    DirLimit topFrontLeftLimit;
-    DirLimit topFrontRightLimit;
-    DirLimit  topBackLeftLimit;
-    DirLimit topBackRightLimit;
-    DirLimit bottomFrontLeftLimit;
-    DirLimit bottomFrontRightLimit;
-    DirLimit bottomBackLeftLimit;
-    DirLimit bottomBackRightLimit;
+    private DirLimit topFrontLeftLimit;
+    private DirLimit topFrontRightLimit;
+    private DirLimit  topBackLeftLimit;
+    private DirLimit topBackRightLimit;
+    private DirLimit bottomFrontLeftLimit;
+    private DirLimit bottomFrontRightLimit;
+    private DirLimit bottomBackLeftLimit;
+    private DirLimit bottomBackRightLimit;
 
-    /*Encoder fL_LiftEnc;
-    Encoder fR_LiftEnc;
-    Encoder bL_LiftEnc;
-    Encoder bR_LiftEnc;//*/
-
-    int loopCount;
+    private int loopCount;
 
     LiftSubsystem()
     {
-        /*leftFront = new Solenoid(Constants.FRONT_LEFT_LIFT_PORT);
-        rightFront = new Solenoid(Constants.FRONT_RIGHT_LIFT_PORT);
-        leftBack = new Solenoid(Constants.BACK_LEFT_LIFT_PORT);
-        rightBack = new Solenoid(Constants.BACK_RIGHT_LIFT_PORT);
-
-        lift = new Solenoid[] {leftFront, rightFront, leftBack, rightBack}; 
-        frontLift = new Solenoid[] {leftFront, rightFront};
-        backLift = new Solenoid[] {leftBack, rightBack};
-        */
 
         loopCount = 0;
 
@@ -167,84 +153,5 @@ public class LiftSubsystem
         SmartDashboard.putBoolean("Bottom Back Right Limit Switch",    bottomBackRightLimit.get());
         //liftPerodic();
     }
-    /*public void liftPerodic()
-    {
-        avg = (fL_LiftEnc.get() + 
-                fR_LiftEnc.get() +
-                bL_LiftEnc.get() +
-                bR_LiftEnc.get()) / 4;
-        if(isLifting)
-        {
-            if(topBackLeftLimitSwitch.get() || (bL_LiftEnc.get() <= target - liftErr) || (bL_LiftEnc.get() >= target + liftErr))
-            {
-                backLeft.set(ControlMode.PercentOutput, 0);
-            }
-            if(topBackRightLimitSwitch.get() || (bR_LiftEnc.get() <= target - liftErr) || (bR_LiftEnc.get() >= target + liftErr))
-            {
-                backRight.set(ControlMode.PercentOutput, 0);
-            }
-            if(topFrontRightLimitSwitch.get() || (fL_LiftEnc.get() <= target - liftErr) || (fL_LiftEnc.get() >= target + liftErr))
-            {
-                frontRight.set(ControlMode.PercentOutput, 0);
-            }
-            if(topFrontLeftLimitSwitch.get() || (fR_LiftEnc.get() <= target - liftErr) || (fR_LiftEnc.get() >= target + liftErr))
-            {
-                frontLeft.set(ControlMode.PercentOutput, 0);
-            }
-            else
-            {
-                if(bL_LiftEnc.get() > (avg + liftErr))
-                {
-                    backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE-P_UPDATE);
-                }
-                else if(bL_LiftEnc.get() < (avg - liftErr))
-                {
-                    backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE+P_UPDATE);
-                }
-                else
-                {
-                    backLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                //////////////////////////////////////
-                if(bR_LiftEnc.get() > (avg + liftErr))
-                {
-                    backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE-P_UPDATE);
-                }
-                else if(bR_LiftEnc.get() < (avg - liftErr))
-                {
-                    backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE+P_UPDATE);
-                }
-                else
-                {
-                    backRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                //////////////////////////////////////
-                if(fL_LiftEnc.get() > (avg + liftErr))
-                {
-                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE-P_UPDATE);
-                }
-                else if(bL_LiftEnc.get() < (avg - liftErr))
-                {
-                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE+P_UPDATE);
-                }
-                else
-                {
-                    frontLeft.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-                //////////////////////////////////////
-                if(fR_LiftEnc.get() > (avg + liftErr))
-                {
-                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE-P_UPDATE);
-                }
-                else if(fR_LiftEnc.get() < (avg - liftErr))
-                {
-                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE+P_UPDATE);
-                }
-                else
-                {
-                    frontRight.set(ControlMode.PercentOutput, LIFT_MOTOR_SPEED_MAGNITUDE);
-                }
-            }
-        }
-    }//*/
+
 }

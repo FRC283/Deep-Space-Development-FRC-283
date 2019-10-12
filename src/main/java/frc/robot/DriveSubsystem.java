@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem
 {
-    double driveCoefficient = 1.0;
-    TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
-    Utilities283 utils;
+    private double driveCoefficient = 1.0;
+    private TalonSRX frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
+
     DriveSubsystem()
     {
         frontLeftDrive = new TalonSRX(Constants.FRONT_LEFT_DRIVE_PORT);
@@ -38,7 +38,7 @@ public class DriveSubsystem
      */
     public void drive(double lYMag, double lXMag, double rXMag)
     {
-        frontLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag - lYMag + lXMag) * (1 * driveCoefficient)));		
+        frontLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag - lYMag + lXMag) * (1 * driveCoefficient)));
         frontRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag - lYMag - lXMag) * (-1 * driveCoefficient)));
 		backLeftDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (-rXMag + lYMag + lXMag) * (-1 * driveCoefficient)));
         backRightDrive.set(ControlMode.PercentOutput, Utilities283.rescale(Constants.DEAD_ZONE, 1.0, 0.0, 1.0, (rXMag + lYMag - lXMag) * (1 * driveCoefficient)));
