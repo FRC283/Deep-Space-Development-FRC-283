@@ -77,7 +77,7 @@ public class LiftSubsystem
 
         backRight.setInverted(true);
         backLeft.setInverted(true);
-
+        
 
 
         topFrontLeftLimitSwitch = new DigitalInput(Constants.LIFT_TOP_FRONT_LEFT_LIMIT_SWITCH);
