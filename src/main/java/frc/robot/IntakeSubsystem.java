@@ -39,12 +39,9 @@ public class IntakeSubsystem
     private double pos;
     private static final double P_COFFECIENT = .5;
 
-    private HashMap<String, Object> loadedSubsystems;
-
     IntakeSubsystem()
     {
         rotateEncoder = new Encoder(Constants.INTAKE_ROTATION_ENCODER_PORT_A, Constants.INTAKE_ROTATION_ENCODER_PORT_B);
-        loadedSubsystems = new HashMap<String, Object>();
         intakeUpperLimitSwitch = new DigitalInput(Constants.INTAKE_UPPER_LIMIT_SWITCH);
         intakeRollers = new VictorSP(Constants.INTAKE_ROLLER_MOTOR_PORT);
         leftIntakeRotation = new VictorSP(Constants.LEFT_INTAKE_ACTUATION_MOTOR_PORT);
@@ -152,15 +149,5 @@ public class IntakeSubsystem
             intakeRollers.set(ROLLER_SPEED_MAGNITUDE);
         else
             intakeRollers.set(0);
-    }
-
-    public void loadSubsystem(String name, Object subsystem)
-    {
-        loadedSubsystems.put(name, subsystem);
-    }
-
-    public Object getSubsystem(String name)
-    {
-        return loadedSubsystems.get(name);
     }
 }

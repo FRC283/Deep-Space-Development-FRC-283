@@ -9,28 +9,27 @@ public class ArmSubsystem
     //Number of seconds to keep the kicker extended  
     private static final double CARGO_KICKER_TIMER_DURATION = 1;
     private static final double HATCH_KICKER_TIMER_DURATION = 1;
-    Timer cargoKickerTimer;
-    Timer hatchKickerTimer;
-    boolean grippersClosed = false;
-    boolean extendCargoKicker = false;
-    boolean extendHatchKicker = false;
+    private Timer cargoKickerTimer;
+    private Timer hatchKickerTimer;
+    private boolean grippersClosed = false;
+    private boolean extendCargoKicker = false;
+    private boolean extendHatchKicker = false;
 
 
-    Victor elbowMotor, leftWristMotor, rightWristMotor;
+    private Victor elbowMotor, leftWristMotor, rightWristMotor;
     //Encoder leftWristEnc, rightWristEnc;
-    Solenoid gripSol, cargoSol, hatchSol;
-    AnalogInput  leftWristEnc, rightWristEnc;
+    private Solenoid gripSol, cargoSol, hatchSol;
     DigitalInput elbowUpperLimitSwitch;
     DigitalInput elbowLowerLimitSwitch;
     Encoder elbowEncoder;
     //Servo cameraServo;
-    Boolean isPositioning = false;
+    private Boolean isPositioning = false;
     /**Current target of elbow*/
-    static double target; 
+    private static double target;
     /**Current position of elbow*/
-    static double pos;
+    private static double pos;
     /**Current elbow motor speed*/ 
-    static double currentElbowSpeed;
+    private static double currentElbowSpeed;
     /** Coefficient to scale the rate of speed for the P (Proportional) control for the 
      *  elbow movement */
     private static final double P_COEFFICIENT = .01;
@@ -51,12 +50,8 @@ public class ArmSubsystem
     private static final int HIGH_HATCH = -1193;
     private static final int OFFSET = 25;
 
-    private HashMap<String, Object> loadedSubsystems;
-
     ArmSubsystem()
     {
-        loadedSubsystems = new HashMap<String, Object>();
-
         //Motor Controllers
         elbowMotor = new Victor(Constants.ELBOW_MOTOR_PORT);
         leftWristMotor = new Victor(Constants.LEFT_WRIST_MOTOR_PORT);
@@ -90,8 +85,7 @@ public class ArmSubsystem
      * Called every teleop periodic cycle
      * 
      * Calls wristPeriodic() and rotatePeriodic()
-     * @see wristPeriodic()
-     * @see rotatePeriodic()
+     * @see this.wristPeriodic()
      */
     public void periodic()
     {
@@ -277,11 +271,11 @@ public class ArmSubsystem
      * for controlling the solenoids on the wrist
      * 
      * @param toggleGrippers - Passed as the parameter to actuateGrippers
-     * @see actuateGrippers(boolean toggle)
+     * @see this.actuateGrippers()
      * @param extendCargo - Passed as the parameter to actuateCargoKicker
-     * @see actuateCargoKicker(boolean extend)
+     * @see this.actuateCargoKicker()
      * @param extendHatch - Passed as the parameter to actuateHatckKicker
-     * @see actuateHatchKicker(boolean extend)
+     * @see this.actuateHatchKicker()
      */
     public void actuateWrist(boolean toggleGrippers, boolean extendCargo, boolean extendHatch)
     {
@@ -307,7 +301,7 @@ public class ArmSubsystem
      * Function for setting the kicker cylinders for the cargo (inside the grippers) 
      * to the extended state
      * 
-     * @see wristPeriodic() for where the kicker cylinders for the cargo are set to the
+     * @see this.wristPeriodic() for where the kicker cylinders for the cargo are set to the
      * retracted state after time period (in seconds) CARGO_KICKER_TIMER_DURATION
      * 
      * @param extend - Boolean value; if true, will set extendCargoKicker to true and the periodic
@@ -326,7 +320,7 @@ public class ArmSubsystem
      * Function for setting the kicker/release cylinders for the hatch (inside the grippers) 
      * to the extended state
      * 
-     * @see wristPeriodic() for where the kicker/release cylinders for the hatch are set to the
+     * @see this.wristPeriodic() for where the kicker/release cylinders for the hatch are set to the
      * retracted state after time period (in seconds) HATCH_KICKER_TIMER_DURATION
      * 
      * @param extend - Boolean value; if true, will set extendHatchKicker to true and the periodic
@@ -339,15 +333,5 @@ public class ArmSubsystem
             extendHatchKicker = true;
             hatchKickerTimer.start();
         }
-    }
-
-    public void loadSubsystem(String name, Object subsystem)
-    {
-        loadedSubsystems.put(name, subsystem);
-    }
-
-    public Object getSubsystem(String name)
-    {
-        return loadedSubsystems.get(name);
     }
 }

@@ -5,7 +5,44 @@ public abstract class Utilities283
 	public static void main(String[] args)
 	{
 	}
-	
+	//Logitech Ports (Default)
+		//Digital
+		public static final int LOGITECH_A = 0;
+		public static final int LOGITECH_B = 1;
+		public static final int LOGITECH_X = 2;
+		public static final int LOGITECH_Y = 3;
+		public static final int LOGITECH_LEFT_BUMPER = 4;
+		public static final int LOGITECH_RIGHT_BUMPER = 5;
+		public static final int LOGITECH_BACK = 6;
+		public static final int LOGITECH_START = 7;
+		public static final int LOGITECH_LEFT_STICK_BUTTON = 8;
+		public static final int LOGITECH_RIGHT_STICK_BUTTON = 9;
+	//Analog
+		public static final int LOGITECH_LEFT_X = 10;
+		public static final int LOGITECH_LEFT_Y = 11;
+		public static final int LOGITECH_LEFT_TRIGGER = 12;
+		public static final int LOGITECH_RIGHT_TRIGGER = 13;
+		public static final int LOGITECH_RIGHT_X = 14;
+		public static final int LOGITECH_RIGHT_Y = 15;
+//Xbox Ports
+	//Digital
+		public static final int XBOX_A = 16;
+		public static final int XBOX_B = 17;
+		public static final int XBOX_X = 18;
+		public static final int XBOX_Y = 19;
+		public static final int XBOX_LEFT_BUMPER = 20;
+		public static final int XBOX_RIGHT_BUMPER = 21;
+		public static final int XBOX_BACK = 22;
+		public static final int XBOX_START = 23;
+		public static final int XBOX_LEFT_STICK_BUTTON = 24;
+		public static final int XBOX_RIGHT_STICK_BUTTON = 25;
+	//Analog
+		public static final int XBOX_LEFT_X = 26;
+		public static final int XBOX_LEFT_Y = 27;
+		public static final int XBOX_LEFT_TRIGGER = 28;
+		public static final int XBOX_RIGHT_TRIGGER = 29;
+		public static final int XBOX_RIGHT_X = 30;
+		public static final int XBOX_RIGHT_Y = 31; 
 	/**
 	 * Shortcut for using the rescaler with a deadzone
 	 * @param value - value to be rescaled
