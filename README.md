@@ -1,9 +1,9 @@
-#FRC 2019 Deep Space Code
+# FRC 2019 Deep Space Code
 
 This repository holds FRC Team 283's code for the 2019 FRC Season. 
 All source code is located in the src/main/java directory inside the frc.robot package.
 
-##Subsystems
+## Subsystems
 Our robot is split into several subsystems that each control a functional portion of the robot
 
 - Arm Subsystem - Controls the long "arm" that supports the grippers that grab the cargo for the game
