@@ -86,11 +86,13 @@ public class Robot extends TimedRobot {
 
     arm.manualRotate(xbox.getRawAxis(Constants.LEFT_Y), xbox.getRawAxis(Constants.RIGHT_Y));
 
-    arm.rotate(xbox.getRawButton(Constants.BACK),
+    /*
+     arm.rotate(xbox.getRawButton(Constants.BACK),
                xbox.getRawButton(Constants.START),
                xbox.getRawButton(Constants.B),
                xbox.getRawButton(Constants.A),
               xbox.getRawButton(Constants.X));
+              */
 
     SmartDashboard.putNumber("Elbow Encoder Value (Test Periodic)", arm.elbowEncoder.get());
     SmartDashboard.putBoolean("Elbow Upper Limit Switch", arm.elbowUpperLimitSwitch.get());
